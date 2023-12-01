@@ -1,4 +1,4 @@
-USE electronacerdb2;
+USE electronacerb7;
 --@block
 CREATE TABLE clients (
     id INT NOT NULL,
