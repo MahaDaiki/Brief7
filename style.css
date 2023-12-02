@@ -1,0 +1,24 @@
+body {
+    background-color: #3498db;
+}
+
+
+.container {
+    margin-top: 50px;
+}
+
+.login-form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.signup-link {
+   
+    margin-top: 10px;
+}
+
+.tso{
+    margin-left: 120px;
+}
