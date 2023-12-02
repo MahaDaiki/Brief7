@@ -1,17 +1,18 @@
-USE electronacerdb2;
+USE electronacerb7;
 --@block
 CREATE TABLE clients (
     id INT NOT NULL,
     fullname VARCHAR(250) NOT NULL,
     username VARCHAR(30) NOT NULL,
-    email VARCHAR(250) NOT NULL,
-    phonenumber INT,
+    email VARCHAR(250) NOT NULL UNIQUE,
+    phonenumber INT UNIQUE,
     adresse VARCHAR(250),
     city VARCHAR(250),
     passw VARCHAR(220) NOT NULL,
-    valide BOOLEAN DEFAULT false,
+    valide BOOLEAN ,
     PRIMARY KEY (id)
-) 
+);
+
 --@block
 CREATE TABLE admins(
     id INT PRIMARY KEY NOT NULL IDENTITY(1,1),
