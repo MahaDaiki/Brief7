@@ -22,3 +22,67 @@ body {
 .tso{
     margin-left: 120px;
 }
+.menuwrp{
+    position:absolute;
+    top: 100%;
+    right:10%;
+    width:320px;
+    max-height: 0px;
+    overflow: hidden;
+    transition: max-height 0.5s;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  
+   
+   }
+  
+  .menuwrpopen{
+    max-height: 400px;
+    
+  
+   }
+  
+   .submenu{
+    background: #fff;
+    padding: 20px;
+   
+   }
+   .submenu hr{
+    border: 0;
+    height: 1px;
+    width: 100%;
+    background: #ccc;
+    margin: 15px 0 10px;
+    
+   }
+   .userinfo{
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+  
+   }
+   .userinfo img{
+    width: 60px;
+    border-radius: 50%;
+    margin-right: 15px;
+   }
+  nav{
+      background-color: #505FE9;
+  }
+  .lo{
+      background-color: #7682EE;
+      border-radius: 35px;
+      margin-left: 4rem;
+  }
+    .navbar-brand {
+      font-weight: bold;
+      color: #fff;
+    }
+  
+    .navbar-nav {
+      margin-left: auto;
+    }
+  
+    .nav-link {
+      color: #fff;
+    }
+  
