@@ -1,167 +1,91 @@
-<?php 
+<?php
 include("config.php");
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-session_start();
-
-
-$isAdmin = isset($_SESSION['is_admin']);
-$categoriesResult = $conn->query("SELECT * FROM categories");
-
-$categories = [];
-while ($row = $categoriesResult->fetch_assoc()) {
-    $categories[] = $row;
-}
-
-// Fetch products based on the selected category filter
-$categoryFilter = isset($_GET['category']) ? $_GET['category'] : null;
-$stockFilter = isset($_GET['stock']) && $_GET['stock'] == 'low';
-
-if ($stockFilter) {
-    $sql = "SELECT * FROM products WHERE stock_quantity <= min_quantity";
-    $result = $conn->query($sql);
-
-} else {
-    // If the button is not pressed, show products based on the selected category filter or all products
-    if ($categoryFilter) {
-        $categoryFilterString = implode("','", $categoryFilter);
-        $sql = "SELECT * FROM products WHERE category_name IN ('$categoryFilterString')";
-        $result = $conn->query($sql);
-    } else {
-        // If no category filter is applied and "Show Low on Stock Products" is not pressed, show all products
-        $result = $conn->query("SELECT * FROM products");
-    }
-}
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Category</title>
+    <title>Sign Up</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
-<body style="background: linear-gradient(to bottom, #6ab1e7,#023364)">
-
-<nav class="navbar navbar-expand-sm navbar-dark ">
+<body>
     <div class="container">
-        <a href="#" class="navbar-brand">NE</a>
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a href="home.php" class="nav-link">Home</a>
-            </li>
-            <li class="nav-item">
-                <a href="category.php" class="nav-link">Categories</a>
-            </li>
-        </ul>
-        <img width="48" src="img/user-286-128.png" alt="profile" class="user-pic">
-        <div class="menuwrp" id="subMenu" style="z-index: 99 ;">
-            <div class="submenu">
-                <div class="userinfo">
-                    <?php
-            
-            // Check if an admin is logged in
-            if (isset($_SESSION["admin_username"])) {
-              $displayName = $_SESSION["admin_username"];
-            } elseif (isset($_SESSION["username"])) {
-              $displayName = $_SESSION["username"];
-            } else {
-              // Redirect to the login page if neither admin nor user is logged in
-              header("Location: login.php");
-              exit();
-            }
-            ?>
-            <div class="userinfo">
-              <img src="img/user-286-128.png" alt="user">
-              <h2>
-                <?php echo $displayName; ?>
-              </h2>
-              <hr>
-              <?php
-                    if ($isAdmin) {
-                        echo '<a href="adminpan.php">Admin Panel</a>';
-                    }
-                    ?>
-                    <div>
-              <a href="logout.php">Log Out</a>
-            
-                </div>
-            </div>
-        </div>
-    </div>
-</nav>
-
-<div class="container mt-4">
-    <form action="" method="get" class=" mt-4 justify-content-center">
-        <?php
-        foreach ($categories as $category) {
-            if ($category['bl'] == 1) {
-            ?>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="category[]" value="<?php echo $category['catname']; ?>" 
-                <?php if (is_array($categoryFilter) && in_array($category['catname'], $categoryFilter)) echo 'checked'; ?>>
-                <label class="form-check-label">
-                    <img src="<?php echo $category['imgs']; ?>" alt="<?php echo $category['catname']; ?>" width="50" height="50"><br>
-                    <?php echo $category['catname']; ?>
-                </label>
-            </div>
-            <?php
-        }
-    }
-        ?>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" name="stock" value="low" <?php if ($stockFilter) echo 'checked'; ?>>
-            <label class="form-check-label">Low Stock</label>
-        </div>
-        <button type="submit" class="btn btn-primary">Filter</button>
-        <?php
-                    if ($isAdmin) {
-                        echo '<a class="btn btn-primary" href=add.php>ADD</a>';
-                        echo '<a class="btn btn-primary ml-1" href=managecat.php>Manage</a>';
-    }
-    ?>
-
-    </form>
-
-    <div class="row">
-        <?php
-        // Display products based on the filter
-        while ($item = $result->fetch_assoc()) {
-            if ($item['bl']) {
-                ?>
-            <div class="col-md-3 mb-4">
-                <div class="card">
-                    <img src="<?php echo $item['imgs']; ?>" class="card-img-top" alt="<?php echo $item['productname']; ?>">
-                    <div class="card-body">
-                        <h5 class="card-title"><?php echo $item['productname']; ?></h5>
-                        <h6><?php echo $item['descrip']; ?></h6>
-                        <p class="card-text">
-                            Final Price: <?php echo $item['final_price']; ?><br>
-                            offer Price: <?php echo $item['price_offer']; ?><br>
-                            Stock Quantity: <?php echo $item['stock_quantity']; ?><br>
-                            Category: <?php echo $item['category_name']; ?>
-                        </p>
+        <div class="row">
+           
+            <div class="col-md-3">
+                <div class="list-group">
+                    <h3>Category</h3>
+                    <div >
                         <?php
-                    if ($isAdmin) {
-                        echo '<a href="edit.php?product_id=' . $item['reference'] . '" class="btn btn-primary">Edit</a>';
-                    }
-                    ?>
+                       $query = "SELECT catname, imgs FROM Categories WHERE bl = 1 ORDER BY catname ASC";
+                       $result = mysqli_query($conn, $query);
+                       
+                       while ($row = mysqli_fetch_assoc($result)) {
+                       ?>
+                           <div class="list-group-item checkbox">
+                               <label>
+                                   <input type="checkbox" class="common_selector category" value="<?php echo $row['catname']; ?>">
+                                    <img src="<?php echo $row['imgs']; ?>" alt="Category Image" style="width: 50px; height: 50px;">
+                                   <?php echo $row['catname']; ?>
+                                  
+                               </label>
+                           </div>
+                       <?php
+                       }
+                       ?>
                     </div>
                 </div>
             </div>
-            <?php
-        }
-    }
 
-        ?>
-        
+            <div class="col-md-9">
+                <br />
+                <div class="row filter_data">
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script src="index.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function filter_data() {
+                var action = 'fetch_data';
+                var category = get_filter('category');
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "fetch_data.php", true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        document.querySelector('.filter_data').innerHTML = xhr.responseText;
+                    }
+                };
+                xhr.send("action=" + action + "&category=" + JSON.stringify(category));
+            }
+
+            function get_filter(class_name) {
+                var filter = [];
+                var checkboxes = document.querySelectorAll('.' + class_name + ':checked');
+                checkboxes.forEach(function (checkbox) {
+                    filter.push(checkbox.value);
+                });
+                return filter;
+            }
+
+            document.querySelectorAll('.common_selector').forEach(function (selector) {
+                selector.addEventListener('change', function () {
+                    filter_data();
+                });
+            });
+
+            // Initial load
+            filter_data();
+        });
+    </script>
 </body>
+
 </html>
