@@ -1,4 +1,4 @@
-USE electronacerb7;
+USE electronacerdb7;
 --@block
 CREATE TABLE clients (
     id INT NOT NULL,
@@ -15,15 +15,15 @@ CREATE TABLE clients (
 
 --@block
 CREATE TABLE admins(
-    id INT PRIMARY KEY NOT NULL ,
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     username VARCHAR(100) NOT NULL,
     email VARCHAR(250) NOT NULL,
     passw VARCHAR(250) NOT NULL
-    
+
 );
 --@block
 INSERT INTO admins ( username , email ,passw) VALUES
-('admin1','admin1@email.com','admin1')
+('admin1','admin1@email.com','admin1');
 --@block
 CREATE TABLE orders(
     order_id INT PRIMARY KEY,
@@ -32,23 +32,8 @@ CREATE TABLE orders(
     delivery_date DATE,
     total_price DECIMAL(10, 2),
     bl BOOLEAN ,
-
-)
---@block
-CREATE TABLE Products (
-    reference INT PRIMARY KEY,
-    imgs VARCHAR(250),
-    productname VARCHAR(255) NOT NULL,
-    barcode VARCHAR(10) NOT NULL,
-    purchase_price DECIMAL(10, 2) NOT NULL,
-    final_price DECIMAL(10, 2) NOT NULL,
-    price_offer DECIMAL(10, 2) ,
-    descrip TEXT,
-    min_quantity INT NOT NULL,
-    stock_quantity INT NOT NULL,
-    category_name VARCHAR(50),
-    FOREIGN KEY (category_name) REFERENCES Categories(catname) ON DELETE CASCADE,
-    bl BOOLEAN
+    client_id INT,
+    FOREIGN KEY (client_id) REFERENCES clients(id)
 );
 
 --@block
@@ -68,9 +53,24 @@ INSERT INTO categories ( catname , descrip ,imgs, bl) VALUES
     ('Computers','Gaming,laptops and pcs', 'img/catlaptop&pc.jpg',1),
     ('Monitors','Gaming, Ultra-Wide,4k, Curved Monitors','img/catmonitors.jpg',1),
     ('SSD','SATA,NVMe,External SSDs', 'img/catssd.jpg',1),
-    ('RAM','DDR,RGB RAM', 'img/catram.jpg',1)
+    ('RAM','DDR,RGB RAM', 'img/catram.jpg',1);
 
-
+--@block
+CREATE TABLE Products (
+    reference INT PRIMARY KEY,
+    imgs VARCHAR(250),
+    productname VARCHAR(255) NOT NULL,
+    barcode VARCHAR(10) NOT NULL,
+    purchase_price DECIMAL(10, 2) NOT NULL,
+    final_price DECIMAL(10, 2) NOT NULL,
+    price_offer DECIMAL(10, 2) ,
+    descrip TEXT,
+    min_quantity INT NOT NULL,
+    stock_quantity INT NOT NULL,
+    category_name VARCHAR(50),
+    FOREIGN KEY (category_name) REFERENCES Categories(catname) ON DELETE CASCADE,
+    bl BOOLEAN
+);
     --@block
 INSERT INTO Products ( imgs, productname, barcode, purchase_price, final_price, price_offer, descrip, min_quantity, stock_quantity, category_name, bl) VALUES 
  ('img/ram1.jpg', 'Ram 8gb',235467896, 300, 450, 435 , 'Ram 8gb', 2, 20, 'RAM',  true ),
@@ -97,5 +97,13 @@ INSERT INTO Products ( imgs, productname, barcode, purchase_price, final_price, 
     ('img/keyboard2.jpg','Keyboard Rosewill', 987356438,800,1500,NULL,'Rosewill NEON RGB Wired Mechanical Gaming Keyboard',2,4,'Keyboards' , true),
     ('img/keyboard3.jpg','Keyboard Neon Rosewill', 987356878,700,1900,NULL,'Rosewill NEON Wired Mechanical Gaming Keyboard',2,10,'Keyboards' , true),
     ('img/c1.jpg','White headset',2638465489,800,1000,NULL,'Wireless headset RGB',2,1,'Headsets', true),
-    ('img/c2.jpg','Black headset',2648465489,900,1200,NULL,'Wireless headset RGB',2,5,'Headsets', true)
+    ('img/c2.jpg','Black headset',2648465489,900,1200,NULL,'Wireless headset RGB',2,5,'Headsets', true);
 
+--@block
+CREATE TABLE OrderProduct(
+    order_id INT,
+    product_ref INT,
+    quantity INT,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id),
+    FOREIGN KEY (product_ref) REFERENCES Products(reference)
+);
