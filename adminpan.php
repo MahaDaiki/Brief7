@@ -42,35 +42,6 @@ if (isset($_GET["verify_user"])) {
     exit();
 }
 
-if (isset($_GET["promoteadmin"])) {
-    $user_admin = $_GET['promoteadmin'];
-
-    // Fetch user details from the users table
-    $get_data = $conn->prepare("SELECT * FROM users WHERE email = ?");
-    $get_data->bind_param("s", $user_admin);
-    $get_data->execute();
-    $result = $get_data->get_result();
-
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-
-        // Insert the user into the admins table
-        $insert_admin_sql = $conn->prepare("INSERT INTO admins (username, email, passw) VALUES (?, ?, ?)");
-        $insert_admin_sql->bind_param("sss", $row['username'], $row['email'], $row['passw']);
-        $insert_admin_sql->execute();
-
-        // Delete the user from the users table
-        $delete_user_sql = $conn->prepare("DELETE FROM users WHERE email = ?");
-        $delete_user_sql->bind_param("s", $row['email']);
-        $delete_user_sql->execute();
-
-        header("Location: users.php");
-        exit();
-    } else {
-        echo "User not found!";
-    }
-}
-
 // Retrieve all for display 
 $select_users_sql = "SELECT * FROM users";
 $result = $conn->query($select_users_sql);
@@ -156,12 +127,11 @@ $admins_result = $conn->query($select_admins_sql);
                     echo "<td>{$row['id']}</td>";
                     echo "<td>{$row['username']}</td>";
                     echo "<td>{$row['email']}</td>";
-                    echo "<td>";
+                    echo "<tr>";
                     echo "<a href='adminpan.php?delete_user={$row['id']}' class='btn btn-danger btn-sm mr-2'>Delete</a>";
                     if (isset($row['valide']) && $row['valide'] == 0) {
                         echo "<a href='adminpan.php?verify_user={$row['id']}' class='btn btn-success btn-sm mr-2'>Verify</a>";
                     }
-                    echo "<a href='adminpan.php?promoteadmin=" . urlencode($row['email']) . "'><button type='button' class='btn btn-primary'>Promote</button></a>";
                     echo "</td>";
                     echo "</tr>";
                 }
@@ -192,7 +162,27 @@ $admins_result = $conn->query($select_admins_sql);
             </tbody>
         </table>
     </div>
+    <div class="container mt-5">
+    <h3 class="mt-5 text-center">Orders</h3>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <td>Order</td>
+                <td>order's date</td>
+                <td>sending date</td>
+                <td>delivering date</td>
+                <td>status</td>
+                <td>delail</td>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+                
+            ?>
+        </tbody>
+    </table>
     </div>
+    
 <script src="index.js"></script>
 </body>
 </html>
