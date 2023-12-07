@@ -16,11 +16,7 @@
 
     <?php
 
-        $connection = new mysqli("localhost", "root", "", "electronacerdb7");
-
-        if(!$connection) {
-            die("Connection failed: " . mysqli_connect_error());
-        }
+        include("config.php");
 
 
         $categoriesList = $connection->query("SELECT * FROM Categories;");
