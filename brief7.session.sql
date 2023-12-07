@@ -1,4 +1,4 @@
-USE electronacerb7;
+USE electronacerdb7;
 --@block
 CREATE TABLE clients (
     id INT NOT NULL,
@@ -108,5 +108,3 @@ CREATE TABLE OrderProduct(
     FOREIGN KEY (order_id) REFERENCES orders(order_id),
     FOREIGN KEY (product_ref) REFERENCES Products(reference)
 );
-
-
