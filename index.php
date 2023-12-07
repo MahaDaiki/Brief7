@@ -24,7 +24,7 @@
 
 
         $categoriesList = $connection->query("SELECT * FROM Categories;");
-        $productsList = $connection->query("SELECT * FROM Products where final_price > 7000;");
+        $productsList = $connection->query("SELECT * FROM Products where stock_quantity > 15;");
 
 
 
@@ -59,14 +59,11 @@
         <?php
             echo '<div class="card-deck" style="margin: 50px;">';
             while($product = $productsList->fetch_assoc()) {
-                $imagePath = $product['imgs'];
-                $productName = $product['productname'];
-                $productDescription = $product['descrip'];
                 echo '<div class="card" style="background-color: rgb(169, 201, 223); ">';
-                echo '<img class="card-img-top" src="'.$imagePath.'" alt="Card image cap">';
+                echo '<img class="card-img-top" src="'.$product['imgs'].'" alt="Card image cap">';
                 echo '<div class="card-body">';
-                echo '<h5 class="card-title">'.$productName.'</h5>';
-                echo '<p class="card-text">'.$productDescription.'</p>';
+                echo '<h5 class="card-title">'.$product['productname'].'</h5>';
+                echo '<p class="card-text">'.$product['descrip'].'</p>';
                 echo '</div>';
                 echo '</div>';
             }
@@ -85,29 +82,19 @@
     </h3>
     <div class="card-deck" style="margin: 50px;">
         
-        <div class="card" style="background-color: rgb(169, 201, 223);">
-        <img class="card-img-top" src="img\\c2.jpg" alt="Card image cap">
-        <div class="card-body">
-            <h5 class="card-title">HEADPHONE D785</h5>
-            <p class="card-text"></p>BERIBES Upgraded Hybrid Active Noise Cancelling Headphones with Transparent Modes,65H Playtime Wireless Bluetooth with Mic, Deep Bass,3.5MM Cable,Soft-Earpads,Fast Charging-Black.
-        </div>
-        </div>
-
-        <div class="card" style="background-color: rgb(169, 223, 188);">
-            <img class="card-img-top" src="img\\c2.jpg" alt="Card image cap">
-        <div class="card-body">
-            <h5 class="card-title">AGASA KEYBOARD</h5>
-            <p class="card-text">SteelSeries USB Apex 5 Hybrid Mechanical Gaming Keyboard – Per-Key RGB Illumination – Aircraft Grade Aluminum Alloy Frame – OLED Smart Display (Hybrid Blue Switch).</p>
-        </div>
-        </div>
-
-        <div class="card" style="background-color: rgb(225, 137, 113);">
-            <img class="card-img-top" src="img\\c2.jpg" alt="Card image cap">
-            <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            </div>
-        </div>
+    <?php
+            echo '<div class="card-deck" style="margin: 50px;">';
+            while($category = $categoriesList->fetch_assoc()) {
+                echo '<div class="card" style="background-color: rgb(169, 201, 223); ">';
+                echo '<img class="card-img-top" src="'.$category['imgs'].'" alt="Card image cap">';
+                echo '<div class="card-body">';
+                echo '<h5 class="card-title">'.$category['catname'].'</h5>';
+                echo '<p class="card-text">'.$category['descrip'].'</p>';
+                echo '</div>';
+                echo '</div>';
+            }
+            echo '</div>';
+        ?>
 
     </div>
     <!-- CATEGORIES  -->

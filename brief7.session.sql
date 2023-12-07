@@ -107,5 +107,3 @@ CREATE TABLE OrderProduct(
     FOREIGN KEY (order_id) REFERENCES orders(order_id),
     FOREIGN KEY (product_ref) REFERENCES Products(reference)
 );
-
-
