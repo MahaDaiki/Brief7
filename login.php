@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["admin_username"] = $username;
             $_SESSION["is_admin"] = true;
 
-            header("Location: index.php");
+            header("Location: items.php");
             exit();
         } else {
             echo "Error: Incorrect admin password.";
@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Verify the user password
             if (password_verify($password, $hashedPassword)) {
                 $_SESSION["username"] = $username;
-                header("Location: index.php");
+                header("Location: items.php");
                 exit();
             } else {
                 echo "Error: Incorrect password.";
