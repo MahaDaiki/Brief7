@@ -1,0 +1,219 @@
+/* Font */
+@font-face {
+    font-family: Inter;
+    src: url("..\\fonts\\Inter.ttf");
+}
+/* Font */
+
+
+body {
+    margin: 0px;
+}
+
+
+.large-title {
+    color: #0096FF;
+    font-size: 1.8rem;
+    margin: 0px;
+    padding: 2%;
+    font-family: Inter;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+
+
+/* Basket items */
+.basket-items-container {
+    display: flex;
+    flex-direction: column;
+    padding-right: 5%;
+}
+
+.basket-item-container {
+    width: 650px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    margin: 2%;
+    border-radius: 2%;
+    background-color: #0096FF;
+    box-shadow:  1px 1px 100px rgb(0, 0, 0, 20%);
+}
+
+.basket-item-container img {
+    width: 200px;
+    height: 200px;
+    border-radius: 5px;
+    padding: 2%;
+}
+
+.basket-item-container div {
+    padding: 2%;
+}
+
+.basket-item-container div > p:nth-child(1) {
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 2%;
+    font-family: Inter;
+    margin: 0px;
+    margin-bottom: 2%;
+}
+
+.basket-item-container div > p:nth-child(2) {
+    font-size: 1.1rem;
+    padding: 2%;
+    font-family: Inter;
+    margin: 0px;
+    margin-bottom: 2%;
+}
+
+.basket-item-container div > p:nth-child(3) {
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 2%;
+    font-family: Inter;
+    margin: 0px;
+    margin-bottom: 2%;
+}
+
+.basket-item-container div div {
+    height: 50px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.basket-item-container div div button {
+
+    background-color: white;
+    height: 50px;
+    width: 50px;
+    color: #502314;
+    font-family: Inter;
+    font-size: 1.2rem;
+    font-weight: bold;
+    align-items: center;
+    margin: 1%;
+    border-radius: 5%;
+}
+/* Basket items */
+
+
+/* Two Bottom Button */
+.after-shopping-section {
+    width: 100%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    height: max-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.after-shopping-section > button:nth-child(1) {
+    width: 25%;
+    padding: 2%;
+    color: white;
+    font-family: Inter;
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-align: center;
+    border-radius: 5px;
+    border: none;
+    margin: 1%;
+    background-color: #0096FF;
+    box-shadow: 1px 1px 100px rgb(0, 0, 0, 20%);
+}
+.after-shopping-section > button:nth-child(1):hover {
+    background-color: rgba(198, 3, 216, 0.5);
+}
+.after-shopping-section > button:nth-child(1):active {
+    background-color: #3775a0;
+}
+
+.after-shopping-section > button:nth-child(2) {
+    width: 25%;
+    padding: 2%;
+    color: white;
+    font-family: Inter;
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-align: center;
+    border-radius: 5px;
+    border: none;
+    margin: 1%;
+    background-color: #ac421f;
+    box-shadow: 1px 1px 100px rgba(0, 0, 0, 0.2)0.2) 0.2);
+}
+.after-shopping-section > button:nth-child(2):hover {
+    background-color: rgba(6, 51, 28, 0.5);
+}
+.after-shopping-section > button:nth-child(2):active {
+    background-color: #956e3e;
+}
+/* Two Bottom Button */
+
+
+
+
+@media screen and (max-width: 768px) {
+    html {
+        font-size: 12px;
+    }
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    .large-title {
+        font-size: 1.5rem;
+        padding: 1%;
+    }
+    .basket-items-container {
+        padding: 2%;
+    }
+    .basket-item-container {
+        width: 100%;
+        margin: 2% 0;
+    }
+    .basket-item-container img {
+        width: 80px;
+        height: 80px;
+        padding: 1%;
+    }
+    .basket-item-container div {
+        padding: 1%;
+    }
+    .basket-item-container div > p {
+        font-size: 1rem;
+        margin-bottom: 1%;
+    }
+    .basket-item-container div div {
+        height: 40px;
+    }
+    .basket-item-container div div button {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    .after-shopping-section {
+        margin-top: 3%;
+        margin-bottom: 3%;
+    }
+    .after-shopping-section > button:nth-child(1) {
+        width: 80%;
+        font-size: 1.2rem;
+        margin: 2% 0;
+    }
+    .after-shopping-section > button:nth-child(2) {
+        width: 80%;
+        font-size: 1.2rem;
+        margin: 2% 0;
+    }
+}
