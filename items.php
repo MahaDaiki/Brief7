@@ -12,7 +12,7 @@ include("config.php");
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
-<body>
+<body >
 <nav class="navbar navbar-expand-sm navbar-dark ">
     <div class="container">
         <a href="#" class="navbar-brand">NE</a>
@@ -36,10 +36,8 @@ include("config.php");
             <div class="menuwrp" id="subMenu">
                 <div class="submenu">
                     <div class="userinfo">
-                        
-                            <div>
-                                <a href="logout.php">Log Out</a>
-                            </div>
+                        <div>
+                            <a href="logout.php">Log Out</a>
                         </div>
                     </div>
                 </div>
@@ -48,48 +46,56 @@ include("config.php");
     </div>
 </nav>
 
-    <div class="container">
-        <div class="row">
-           
-            <div class="col-md-3">
-                <div class="list-group">
-                    <h3>Category</h3>
-                    <div >
-                        <?php
-                       $query = "SELECT catname, imgs FROM Categories WHERE bl = 1 ORDER BY catname ASC";
-                       $result = mysqli_query($conn, $query);
-                       
-                       while ($row = mysqli_fetch_assoc($result)) {
-                       ?>
-                           <div class="list-group-item checkbox">
-                               <label>
-                                   <input type="checkbox" class="common_selector category" value="<?php echo $row['catname']; ?>">
-                                    <img src="<?php echo $row['imgs']; ?>" alt="Category Image" style="width: 50px; height: 50px;">
-                                   <?php echo $row['catname']; ?>
-                                  
-                               </label>
-                           </div>
-                       <?php
-                       }
-                       ?>
-                    </div>
-                </div>
-            </div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="list-group">
+                <h3>Category</h3>
+                <div>
+                    <?php
+                    $query = "SELECT catname, imgs FROM Categories WHERE bl = 1 ORDER BY catname ASC";
+                    $result = mysqli_query($conn, $query);
 
-            <div class="col-md-9">
-                <br />
-                <div class="row filter_data">
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        ?>
+                        <div class="list-group-item checkbox">
+                            <label>
+                                <input type="checkbox" class="common_selector category" value="<?php echo $row['catname']; ?>">
+                                <img src="<?php echo $row['imgs']; ?>" alt="Category Image" style="width: 50px; height: 50px;">
+                                <?php echo $row['catname']; ?>
+                            </label>
+                        </div>
+                      
+                        <?php
+                    }
+                    ?><label>
+                      <input type="checkbox" class="common_selector" id="sort_alphabetically"> Sort Alphabetically
+                    </label>
                 </div>
             </div>
         </div>
-    </div>
 
-     <script src="index.js"></script>                       
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-        function filter_data(page = 1) {
+        <div class="col-md-9">
+            <br />
+            <div class="input-group mb-3">
+                <input type="text" id="search" class="form-control" placeholder="Search by product name">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" onclick="searchData()">Search</button>
+                </div>
+            </div>
+            <div class="row filter_data"></div>
+            <div class="pagination mt-3" id="pagination-container"></div>
+        </div>
+    </div>
+</div>
+
+<script src="index.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        function filter_data() {
             var action = 'fetch_data';
             var category = get_filter('category');
+            var searchQuery = document.getElementById('search').value.trim(); // Get search query
 
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "fetch_data.php", true);
@@ -99,7 +105,14 @@ include("config.php");
                     document.querySelector('.filter_data').innerHTML = xhr.responseText;
                 }
             };
-            xhr.send("action=" + action + "&category=" + JSON.stringify(category) + "&page=" + page);
+
+            var data = "action=" + action + "&category=" + JSON.stringify(category);
+
+            if (searchQuery !== '') {
+                data += "&search_query=" + searchQuery;
+            }
+
+            xhr.send(data);
         }
 
         function get_filter(class_name) {
@@ -108,8 +121,13 @@ include("config.php");
             checkboxes.forEach(function (checkbox) {
                 filter.push(checkbox.value);
             });
+
             return filter;
         }
+
+        document.getElementById('search').addEventListener('input', function () {
+            filter_data();
+        });
 
         document.querySelectorAll('.common_selector').forEach(function (selector) {
             selector.addEventListener('change', function () {
@@ -117,19 +135,10 @@ include("config.php");
             });
         });
 
-        // Handle pagination click
-        document.addEventListener('click', function (e) {
-            if (e.target && e.target.classList.contains('page-link')) {
-                e.preventDefault();
-                var page = e.target.getAttribute('data-page');
-                filter_data(page);
-            }
-        });
-
         // Initial load
         filter_data();
     });
-    </script>
+</script>
 </body>
 
 </html>
