@@ -1,5 +1,5 @@
 <?php
-session_start();
+session_start(); // Start the session
 require_once("config.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -7,6 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST["password"];
 
     $username = mysqli_real_escape_string($conn, $username);
+
     // Check if it's an admin
     $adminResult = $conn->query("SELECT * FROM admins WHERE username = '$username'");
 

@@ -5,14 +5,17 @@ function generateProductCard($row) {
     return '
     <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
         <div class="card h-100 border-0 shadow product-card">
+        <a href="product_details.php?reference=' . $row['reference'] . '" class="text-decoration-none text-dark">
             <img src="' . $row['imgs'] . '" alt="' . $row['productname'] . '" class="card-img-top">
             <div class="card-body">
                 <h5 class="card-title"><a href="#" class="text-decoration-none text-dark">' . $row['productname'] . '</a></h5>
-                <h6 class="card-subtitle mb-2 text-danger">Price: $' . $row['final_price'] . '</h6>
+                <h6 class="card-subtitle mb-2 text-danger">Price: DH' . $row['final_price'] . '</h6>
+                <h6 class="card-subtitle mb-2 text-danger">DISCOUNT: DH ' . $row['price_offer'] . '</h6><br>
                 <p class="card-text">
                     <strong>Description:</strong> ' . $row['descrip'] . '<br>
-                    <strong>Min Quantity:</strong> ' . $row['min_quantity'] . '<br>
-                    <strong>Stock Quantity:</strong> ' . $row['stock_quantity'] . '
+                    
+                    <strong></strong> '. $row['category_name'] .'  <br>
+                   
                 </p>
             </div>
             <div class="card-footer bg-white">
@@ -23,52 +26,62 @@ function generateProductCard($row) {
     </div>';
 }
 
-if ($_POST['action'] == 'search_data') {
-    $searchQuery = mysqli_real_escape_string($conn, $_POST['search_query']);
-    $query = "SELECT * FROM Products WHERE bl = 1 AND product_name LIKE '%$searchQuery%'";
-    $result = mysqli_query($conn, $query);
 
-    if (mysqli_num_rows($result) > 0) {
-        // Results found
-        while ($row = mysqli_fetch_assoc($result)) {
-            echo generateProductCard($row);
-        }
-    } else {
-        echo 'Nothing found';
+$query = "SELECT * FROM Products WHERE bl = 1";
+
+if (isset($_POST["category"]) && !empty($_POST["category"])) {
+    $category_array = json_decode($_POST["category"], true);
+    if (is_array($category_array)) {
+        $category_filter = implode("','", $category_array);
+        $query .= " AND category_name IN ('" . $category_filter . "')";
     }
 }
 
-if (isset($_POST["action"]) && $_POST["action"] == 'fetch_data') {
-    $query = "SELECT * FROM Products WHERE bl = 1";
+// Check if sorting alphabetically is requested
+$sortAlphabetically = isset($_POST['sort_alphabetically']) ? (bool)$_POST['sort_alphabetically'] : false;
 
-    if (isset($_POST["category"])) {
-        // Decode the JSON string to an array
-        $category_array = json_decode($_POST["category"], true);
+if ($sortAlphabetically) {
+    $query .= " ORDER BY productname ASC";
+}
 
-        if (is_array($category_array)) {
-            $category_filter = implode("','", $category_array);
-            $query .= " AND category_name IN ('" . $category_filter . "')";
-        } else {
-            echo 'Invalid category data received.';
-            exit;
-        }
+// Search filter
+$searchQuery = mysqli_real_escape_string($conn, $_POST['search_query']);
+$searchFilter = mysqli_real_escape_string($conn, $searchQuery);
+
+if ($searchFilter != '') {
+    $query .= " AND (productname LIKE '%" . $searchFilter . "%' OR descrip LIKE '%" . $searchFilter . "%')";
+}
+
+// Stock filter
+$stockFilter = isset($_POST['stock_filter']) ? $_POST['stock_filter'] : false;
+
+if ($stockFilter) {
+    $query .= " AND stock_quantity <= min_quantity";
+}
+
+$result = mysqli_query($conn, $query);
+$total_row = mysqli_num_rows($result);
+
+if ($total_row > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        echo generateProductCard($row);
+    }
+} else {
+    // Display all items if no specific category is selected
+    $all_items_query = "SELECT * FROM Products WHERE bl = 1";
+
+    if ($sortAlphabetically) {
+        $all_items_query .= " ORDER BY productname ASC";
     }
 
-    $result = mysqli_query($conn, $query);
-    $total_row = mysqli_num_rows($result);
+    $all_items_result = mysqli_query($conn, $all_items_query);
 
-    if ($total_row > 0) {
-        while ($row = mysqli_fetch_assoc($result)) {
-            echo generateProductCard($row);
-        }
-    } else {
-        // If no results are found based on the category filter, fetch all items
-        $all_items_query = "SELECT * FROM Products WHERE bl = 1";
-        $all_items_result = mysqli_query($conn, $all_items_query);
-
-        while ($row = mysqli_fetch_assoc($all_items_result)) {
-            echo generateProductCard($row);
-        }
+    while ($row = mysqli_fetch_assoc($all_items_result)) {
+        echo generateProductCard($row);
     }
 }
 ?>
+    
+   
+
+
