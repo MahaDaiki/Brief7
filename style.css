@@ -1,11 +1,11 @@
 body {
-    background-color: #3498db;
+  background: radial-gradient(circle, #a3c7eb, #5fb7f1);
 }
 
 
-.container {
+/* .container {
     margin-top: 50px;
-}
+} */
 
 .login-form {
     background-color: #ffffff;

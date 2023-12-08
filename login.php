@@ -1,5 +1,5 @@
 <?php
-session_start();
+session_start(); // Start the session
 require_once("config.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -7,6 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST["password"];
 
     $username = mysqli_real_escape_string($conn, $username);
+
     // Check if it's an admin
     $adminResult = $conn->query("SELECT * FROM admins WHERE username = '$username'");
 
@@ -18,7 +19,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($password === $adminStoredPassword) {
             $_SESSION["admin_username"] = $username;
             $_SESSION["is_admin"] = true;
-            header("Location: adminpan.php");
+
+            header("Location: index.php");
             exit();
         } else {
             echo "Error: Incorrect admin password.";
@@ -34,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Verify the user password
             if (password_verify($password, $hashedPassword)) {
                 $_SESSION["username"] = $username;
-                header("Location: index.php");
+                header("Location: items.php");
                 exit();
             } else {
                 echo "Error: Incorrect password.";
