@@ -95,6 +95,7 @@ include("config.php");
 </div>
 
 
+
 <script>
         document.addEventListener("DOMContentLoaded", function () {
             function filter_data() {
@@ -140,11 +141,15 @@ include("config.php");
                 });
             });
 
-            // Initial load
-            filter_data();
-        });
-    </script>
-    <script src="index.js"></script>
+            return filter;
+        })
+        
+
+        // Initial load
+        filter_data();
+   
+</script> 
+<script src="index.js"></script>
 </body>
 
 </html>
