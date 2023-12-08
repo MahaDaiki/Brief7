@@ -90,56 +90,52 @@ include("config.php");
     </div>
 </div>
 
-<script src="index.js"></script>
+
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        function filter_data() {
-            var action = 'fetch_data';
-            var category = get_filter('category');
-            var searchQuery = document.getElementById('search').value.trim(); // Get search query
+        document.addEventListener("DOMContentLoaded", function () {
+            function filter_data() {
+                var action = 'fetch_data';
+                var category = get_filter('category');
+                var searchQuery = document.getElementById('search').value.trim();
+                var sortAlphabetically = document.getElementById('sort_alphabetically').checked;
 
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "fetch_data.php", true);
-            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    document.querySelector('.filter_data').innerHTML = xhr.responseText;
-                }
-            };
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "fetch_data.php", true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        document.querySelector('.filter_data').innerHTML = xhr.responseText;
+                    }
+                };
 
-            var data = "action=" + action + "&category=" + JSON.stringify(category);
+                var data = "action=" + action + "&category=" + JSON.stringify(category) + "&search_query=" + searchQuery + "&sort_alphabetically=" + (sortAlphabetically ? 1 : 0);
 
-            if (searchQuery !== '') {
-                data += "&search_query=" + searchQuery;
+                xhr.send(data);
             }
 
-            xhr.send(data);
-        }
+            function get_filter(class_name) {
+                var filter = [];
+                var checkboxes = document.querySelectorAll('.' + class_name + ':checked');
+                checkboxes.forEach(function (checkbox) {
+                    filter.push(checkbox.value);
+                });
 
-        function get_filter(class_name) {
-            var filter = [];
-            var checkboxes = document.querySelectorAll('.' + class_name + ':checked');
-            checkboxes.forEach(function (checkbox) {
-                filter.push(checkbox.value);
-            });
-
-            return filter;
-        }
-
-        document.getElementById('search').addEventListener('input', function () {
+                return filter;
+            }
+            document.getElementById('search').addEventListener('input', function () {
             filter_data();
         });
-
-        document.querySelectorAll('.common_selector').forEach(function (selector) {
-            selector.addEventListener('change', function () {
-                filter_data();
+            document.querySelectorAll('.common_selector').forEach(function (selector) {
+                selector.addEventListener('change', function () {
+                    filter_data();
+                });
             });
-        });
 
-        // Initial load
-        filter_data();
-    });
-</script>
+            // Initial load
+            filter_data();
+        });
+    </script>
+    <script src="index.js"></script>
 </body>
 
 </html>

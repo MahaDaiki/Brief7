@@ -54,6 +54,18 @@ if (isset($_POST["action"]) && $_POST["action"] == 'fetch_data') {
         }
     }
 
+    $sortAlphabetically = isset($_POST['sort_alphabetically']) ? (bool)$_POST['sort_alphabetically'] : false;
+
+    if ($sortAlphabetically) {
+        $query .= " ORDER BY productname ASC";
+    }
+
+     $searchQuery = mysqli_real_escape_string($conn, $_POST['search_query']);
+    $searchFilter = mysqli_real_escape_string($conn, $searchQuery);
+
+    if ($searchFilter != '') {
+        $query .= " AND (productname LIKE '%" . $searchFilter . "%' OR descrip LIKE '%" . $searchFilter . "%')";
+    }
     $result = mysqli_query($conn, $query);
     $total_row = mysqli_num_rows($result);
 
@@ -62,13 +74,15 @@ if (isset($_POST["action"]) && $_POST["action"] == 'fetch_data') {
             echo generateProductCard($row);
         }
     } else {
-        // If no results are found based on the category filter, fetch all items
+        // Display all items if no specific category is selected
         $all_items_query = "SELECT * FROM Products WHERE bl = 1";
         $all_items_result = mysqli_query($conn, $all_items_query);
 
         while ($row = mysqli_fetch_assoc($all_items_result)) {
             echo generateProductCard($row);
-        }
+        }   
     }
+    
+   
 }
 ?>
