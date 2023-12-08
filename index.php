@@ -17,7 +17,7 @@
 
     <?php
 
-        include("config.php");
+      include("config.php");
 
 
         $categoriesList = $conn->query("SELECT * FROM Categories;");

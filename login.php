@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["admin_username"] = $username;
             $_SESSION["is_admin"] = true;
 
-            header("Location: items.php");
+            header("Location: index.php");
             exit();
         } else {
             echo "Error: Incorrect admin password.";
