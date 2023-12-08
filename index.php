@@ -128,8 +128,8 @@
         <div class="col-sm-6">
             <div class="card">
               <div class="card-body">
-                <h5 class="card-title">Swift Delivery, Exceptional Service</h5>
-                <p class="card-text">Experience the convenience of rapid delivery with our commitment to swift service. At ELECTRO-NACER, we prioritize your time, ensuring that your purchases reach your doorstep with speed and efficiency. Our fast delivery service is designed to exceed expectations, bringing your selected items to you in record time.</p>
+                <h5 class="card-title">High quality</h5>
+                <p class="card-text">Pieces selected with exceptional quality.<br>Our commitment to excellence ensures that each piece is carefully chosen and curated to meet the highest standards. Explore our collection and enjoy the epitome of craftsmanship and durability.</p>
                 <a href="#" class="btn btn-primary">Learn more</a>
               </div>
             </div>
@@ -138,8 +138,8 @@
         <div class="col-sm-6">
             <div class="card">
               <div class="card-body">
-                <h5 class="card-title">Swift Delivery, Exceptional Service</h5>
-                <p class="card-text">Experience the convenience of rapid delivery with our commitment to swift service. At ELECTRO-NACER, we prioritize your time, ensuring that your purchases reach your doorstep with speed and efficiency. Our fast delivery service is designed to exceed expectations, bringing your selected items to you in record time.</p>
+                <h5 class="card-title">Peace of Mind with Our Warranty</h5>
+                <p class="card-text">At ELECTRO-NACER, we stand behind the quality of our products. Every purchase comes with our commitment to your satisfaction and a comprehensive warranty for your peace of mind.</p>
                 <a href="#" class="btn btn-primary">Learn more</a>
               </div>
             </div>
