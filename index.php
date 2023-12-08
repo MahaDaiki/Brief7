@@ -16,11 +16,11 @@
 
     <?php
 
-        include("config.php");
+      include("config.php");
 
 
-        $categoriesList = $connection->query("SELECT * FROM Categories;");
-        $productsList = $connection->query("SELECT * FROM Products where stock_quantity > 15;");
+      $categoriesList = $conn->query("SELECT * FROM Categories;");
+      $productsList = $conn->query("SELECT * FROM Products where stock_quantity > 15;");
 
 
 

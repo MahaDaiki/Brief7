@@ -1,7 +1,7 @@
 USE electronacerdb7;
 --@block
 CREATE TABLE clients (
-    id INT NOT NULL,
+    id INT NOT NULL AUTO_INCREMENT,
     fullname VARCHAR(250) NOT NULL,
     username VARCHAR(30) NOT NULL,
     email VARCHAR(250) NOT NULL UNIQUE,
@@ -9,7 +9,7 @@ CREATE TABLE clients (
     adresse VARCHAR(250),
     city VARCHAR(250),
     passw VARCHAR(220) NOT NULL,
-    valide BOOLEAN ,
+    valide BOOLEAN DEFAULT 0 ,
     PRIMARY KEY (id)
 );
 
@@ -26,18 +26,18 @@ INSERT INTO admins ( username , email ,passw) VALUES
 ('admin1','admin1@email.com','admin1');
 --@block
 CREATE TABLE orders(
-    order_id INT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     creation_date DATE,
     shipping_date DATE,
     delivery_date DATE,
     total_price DECIMAL(10, 2),
-    bl BOOLEAN ,
+    bl BOOLEAN DEFAULT 0,
     client_id INT,
     FOREIGN KEY (client_id) REFERENCES clients(id)
 );
 
 --@block
-CREATE TABLE Categories (
+CREATE TABLE categories (
     catname VARCHAR(50) PRIMARY KEY,
     descrip TEXT,
     imgs VARCHAR(250),
@@ -56,7 +56,7 @@ INSERT INTO categories ( catname , descrip ,imgs, bl) VALUES
     ('RAM','DDR,RGB RAM', 'img/catram.jpg',1);
 
 --@block
-CREATE TABLE Products (
+CREATE TABLE products (
     reference INT PRIMARY KEY,
     imgs VARCHAR(250),
     productname VARCHAR(255) NOT NULL,
@@ -100,11 +100,11 @@ INSERT INTO Products ( imgs, productname, barcode, purchase_price, final_price, 
     ('img/c2.jpg','Black headset',2648465489,900,1200,NULL,'Wireless headset RGB',2,5,'Headsets', true);
 
 --@block
-CREATE TABLE OrderProduct(
+CREATE TABLE orderproduct(
     order_id INT,
     product_ref INT,
     quantity INT,
     PRIMARY KEY(order_id, product_ref),
-    FOREIGN KEY (order_id) REFERENCES orders(order_id),
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
     FOREIGN KEY (product_ref) REFERENCES Products(reference)
 );
