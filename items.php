@@ -51,6 +51,7 @@ include("config.php");
         <div class="col-md-3">
             <div class="list-group">
                 <h3>Category</h3>
+                <button class="btn btn-danger btn-sm admin-only-button" >Manage</button>
                 <div>
                     <?php
                     $query = "SELECT catname, imgs FROM Categories WHERE bl = 1 ORDER BY catname ASC";
@@ -72,6 +73,9 @@ include("config.php");
                     <label>
                         <input type="checkbox" class="common_selector" id="sort_alphabetically"> Sort Alphabetically
                     </label>
+                    <label>
+    <input type="checkbox" class="common_selector" id="stock_filter"> Stock Filter
+</label>
                 </div>
             </div>
         </div>
@@ -98,6 +102,7 @@ include("config.php");
                 var category = get_filter('category');
                 var searchQuery = document.getElementById('search').value.trim();
                 var sortAlphabetically = document.getElementById('sort_alphabetically').checked;
+                var stockFilter = document.getElementById('stock_filter').checked;
 
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST", "fetch_data.php", true);
@@ -108,7 +113,11 @@ include("config.php");
                     }
                 };
 
-                var data = "action=" + action + "&category=" + JSON.stringify(category) + "&search_query=" + searchQuery + "&sort_alphabetically=" + (sortAlphabetically ? 1 : 0);
+                var data = "action=" + action +
+           "&category=" + JSON.stringify(category) +
+           "&search_query=" + searchQuery +
+           "&sort_alphabetically=" + (sortAlphabetically ? 1 : 0) +
+           "&stock_filter=" + (document.getElementById('stock_filter').checked ? 1 : 0);
 
                 xhr.send(data);
             }
