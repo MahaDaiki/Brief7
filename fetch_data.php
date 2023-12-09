@@ -67,15 +67,24 @@ if ($total_row > 0) {
         echo generateProductCard($row);
     }
 } else {
-    // Display all items if no specific category is selected
     $all_items_query = "SELECT * FROM Products WHERE bl = 1";
 
+    
     if ($sortAlphabetically) {
         $all_items_query .= " ORDER BY productname ASC";
     }
+    
+ 
+    if ($searchFilter != '') {
+        $all_items_query .= " AND (productname LIKE '%" . $searchFilter . "%' OR descrip LIKE '%" . $searchFilter . "%')";
+    }
 
+    if ($stockFilter) {
+        $all_items_query .= " AND stock_quantity <= min_quantity"; 
+    }
+    
     $all_items_result = mysqli_query($conn, $all_items_query);
-
+    
     while ($row = mysqli_fetch_assoc($all_items_result)) {
         echo generateProductCard($row);
     }
@@ -83,5 +92,4 @@ if ($total_row > 0) {
 ?>
     
    
-
 
