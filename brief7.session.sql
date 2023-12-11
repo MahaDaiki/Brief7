@@ -83,8 +83,8 @@ INSERT INTO Products ( imgs, productname, barcode, purchase_price, final_price, 
     ('img/kingston-25-ssd.jpg','king stone ssd',123456789,500,700,NULL,'KING STONE',2,1,'SSD', true),
     ('img/cooler-master-masterliquid.jpg','cooler',354872873,1000,1500,1232,'liquid cooler',2,2,'Coolers', true),
     ('img/thermaltake-floe-dx-water.jpg','thermaltake',984756378,2000,3000,NULL,'water cooler',2,1,'Coolers', true),
-    ('img/gaming-monitor.jpg',' Monitor',127374914,2000,4500,NULL,'Gaming monitor',2,5,'Monitors', true),
-    ('img/monitor-24-msi.jpg',' Monitor',984538765,3000,6000,5242,'MCI MONITOR',2,3,'Monitors', true),
+    ('img/gaming-monitor.jpg','Monitor',127374914,2000,4500,NULL,'Gaming monitor',2,5,'Monitors', true),
+    ('img/monitor-24-msi.jpg','Monitor',984538765,3000,6000,5242,'MCI MONITOR',2,3,'Monitors', true),
     ('img/samsung-24-curvo.jpg','Samsung Monitor',647647382,5000,7000,NULL,'Samsung Curvo Monitor',2,1,'Monitors', true),
     ('img/gaming-mouse-razer-trinity.jpg','trinity razer mouse ',253984678,500,700,699,'trinity razer gaming',2,3,'Mouse', true),
     ('img/gaming-viper-ultimate-razer-mouse.jpg','viper mouse',836476538,700,900,NULL,'ultimate viper',2,1,'Mouse', true),
@@ -107,3 +107,5 @@ CREATE TABLE OrderProduct(
     FOREIGN KEY (order_id) REFERENCES orders(order_id),
     FOREIGN KEY (product_ref) REFERENCES Products(reference)
 );
+ --@block
+ UPDATE products SET productname = 'Skytech Desktop gaming' WHERE products . reference = 17;

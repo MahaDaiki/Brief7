@@ -53,6 +53,12 @@ include("config.php");
                 <h3>Category</h3>
                 <button class="btn btn-danger btn-sm admin-only-button" >Manage</button>
                 <div>
+                <label>
+                        <input type="checkbox" class="common_selector" id="sort_alphabetically"> Sort Alphabetically
+                    </label>
+                    <label>
+    <input type="checkbox" class="common_selector" id="stock_filter"> Stock Filter
+</label>
                     <?php
                     $query = "SELECT catname, imgs FROM Categories WHERE bl = 1 ORDER BY catname ASC";
                     $result = mysqli_query($conn, $query);
@@ -70,12 +76,7 @@ include("config.php");
                         <?php
                     }
                     ?>
-                    <label>
-                        <input type="checkbox" class="common_selector" id="sort_alphabetically"> Sort Alphabetically
-                    </label>
-                    <label>
-    <input type="checkbox" class="common_selector" id="stock_filter"> Stock Filter
-</label>
+                    
                 </div>
             </div>
         </div>
@@ -97,7 +98,7 @@ include("config.php");
 
 
 <script>
-      document.addEventListener("DOMContentLoaded", function () {
+     document.addEventListener("DOMContentLoaded", function () {
     function filter_data(page) {
         var action = 'fetch_data';
         var category = get_filter('category');
@@ -123,6 +124,19 @@ include("config.php");
 
         xhr.send(data);
     }
+    function updatePaginationLinks(currentPage) {
+        var paginationContainer = document.getElementById('pagination');
+        if (paginationContainer) {
+            paginationContainer.addEventListener('click', function (e) {
+                if (e.target.classList.contains('page-link')) {
+                    e.preventDefault();
+                    var page = e.target.id;
+                    filter_data(page);
+                }
+            });
+        }
+    }
+
 
     function get_filter(class_name) {
         var filter = [];
