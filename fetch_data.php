@@ -26,11 +26,11 @@ function generateProductCard($row) {
     </div>';
 }
 
-
-$page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+if(isset($_POST['page'])) {
+    $page = $_POST['page'];
+}
 $limit = 8;
 $offset = ($page - 1) * $limit;
-
 // Check if sorting alphabetically is requested
 $sortAlphabetically = isset($_POST['sort_alphabetically']) ? (bool)$_POST['sort_alphabetically'] : false;
 
@@ -66,7 +66,6 @@ if ($sortAlphabetically) {
 
 // Count total rows without LIMIT for pagination
 $total_regular_items = mysqli_num_rows(mysqli_query($conn, $query));
-
 $query .= " LIMIT $offset, $limit";
 $result = mysqli_query($conn, $query);
 
@@ -79,7 +78,7 @@ if (mysqli_num_rows($result) > 0) {
     $total_regular_pages = ceil($total_regular_items / $limit);
     echo '<ul class="pagination">';
     for ($i = 1; $i <= $total_regular_pages; $i++) {
-        echo '<li class="page-item"><a class="page-link" href="#" id="' . $i . '">' . $i . '</a></li>';
+        echo '<li class="page-item"><a class="page-link pagination-link" href="#" onclick="filter_data(' . $i . ')" id="' . $i . '">' . $i . '</a></li>';
     }
     echo '</ul>';
 } 
@@ -115,11 +114,9 @@ if (mysqli_num_rows($all_items_result) > 0) {
     $total_all_pages = ceil($total_all_items / $limit);
     echo '<ul class="pagination">';
     for ($i = 1; $i <= $total_all_pages; $i++) {
-        echo '<li class="page-item"><a class="page-link" href="#" id="' . $i . '">' . $i . '</a></li>';
+        echo '<li class="page-item"><a class="page-link pagination-link" href="#" onclick="filter_data(' . $i . ')" id="' . $i . '">' . $i . '</a></li>';
     }
     echo '</ul>';
 } 
-
 ?>
-   
 

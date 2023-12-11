@@ -1,7 +1,7 @@
-USE electronacerdb7;
+-- USE electronacerb7;
 --@block
 CREATE TABLE clients (
-    id INT NOT NULL,
+    id INT NOT NULL ,
     fullname VARCHAR(250) NOT NULL,
     username VARCHAR(30) NOT NULL,
     email VARCHAR(250) NOT NULL UNIQUE,

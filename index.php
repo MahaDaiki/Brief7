@@ -42,7 +42,7 @@
                     <a href="home.php" class="nav-link">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a href="category.php" class="nav-link">Categories</a>
+                    <a href="items.php" class="nav-link">items</a>
                 </li>
             </ul>
 
