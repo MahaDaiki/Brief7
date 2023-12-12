@@ -24,6 +24,8 @@ body {
 
 
 /* Basket items */
+
+
 .basket-items-container {
     display: flex;
     flex-direction: column;
@@ -149,7 +151,7 @@ body {
     border: none;
     margin: 1%;
     background-color: #ac421f;
-    box-shadow: 1px 1px 100px rgba(0, 0, 0, 0.2)0.2) 0.2);
+    box-shadow: 1px 1px 100px rgba(0, 0, 0, 0.2);
 }
 .after-shopping-section > button:nth-child(2):hover {
     background-color: rgba(6, 51, 28, 0.5);
