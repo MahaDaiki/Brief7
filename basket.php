@@ -36,43 +36,48 @@
       include("config.php");
 
 
-    //   $orderProductList = [
-    //     ['order_id' => 1, 'product_ref' => 101, 'quantity' => 2],
-    //     ['order_id' => 1, 'product_ref' => 102, 'quantity' => 1],
-    //     ['order_id' => 2, 'product_ref' => 101, 'quantity' => 3],
-    //     ['order_id' => 2, 'product_ref' => 103, 'quantity' => 2],
-    //     ['order_id' => 3, 'product_ref' => 102, 'quantity' => 1],
-    // ];
+      function incrementQuantity(&$productsList, $productId) {
+        // Loop through the product list
+        foreach ($productsList as &$product) {
+          // Check if product ID matches
+          if ($product['reference'] == $productId) {
+            // Increment stock quantity
+            $product['stock_quantity']++;
+            break; // Stop searching after finding match
+          }
+        }
+      }
 
     $productsList = $conn->query("SELECT * FROM Products where stock_quantity > 15;");
 
-    // while($product = $productsList->fetch_assoc()) {
+    echo "<section id ='basket-items-container' class='basket-items-container'>";
+      
+    while($product = $productsList->fetch_assoc()) {
 
-      echo"<div class = 'basket-item-container'>";
-      echo "<img src='img/ram3.jpg'>";
+      echo "<div class='basket-item-container'>";
+      echo "<img src='" . $product['imgs'] . "'>";
       echo "<div>";
-      echo "<p>RAM</p>";
-      echo "<p>DESCRIPTION</p>";
-      echo "<p>250 DH</p>";
+      echo "<p>" . $product['productname'] . "</p>";
+      echo "<p>" . $product['descrip'] . "</p>";
+      echo "<p>" . number_format($product['final_price'], 2) . " DH</p>";
       echo "<div>";
-      echo "<button class='items-number'>15</button>";
+      echo "<button class='items-number'>" . $product['stock_quantity'] . "</button>";
       echo "<button class='add-item'>+</button>";
       echo "<button class='remove-item'>-</button>";
       echo "</div>";
       echo "</div>";
+      echo "</div>";
+    
+    }
+    
+    
 
-    // }
-
-
+    echo "</section>";
     ?>
 
-    <!-- Basket Items -->
-    <section id ="basket-items-container" class="basket-items-container">
-      
-      <!-- The data will be show after getting it from local storage -->
 
-    </section>
-    <!-- Basket Items -->
+
+
 
 
     
