@@ -40,7 +40,7 @@ session_start();
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a href="home.php" class="nav-link">Home</a>
+                    <a href="index.php" class="nav-link">Home</a>
                 </li>
                 <li class="nav-item">
                     <a href="items.php" class="nav-link">items</a>
@@ -79,7 +79,7 @@ session_start();
                         echo '<a href="adminpan.php">Admin Panel</a>';
                     }
                     ?>
-              <div>
+           
                         <div>
                             <a href="logout.php">Log Out</a>
                         </div>

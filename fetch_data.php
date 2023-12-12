@@ -1,7 +1,11 @@
 <?php
+session_start();
 include("config.php");
+$isAdmin = isset($_SESSION['is_admin']);
+function generateProductCard($row,$isAdmin) {
+   
+    $adminButton = $isAdmin ? '<button class="btn btn-danger btn-sm admin-only-button" data-product-id="' . $row['reference'] . '">Modify</button>' : '';
 
-function generateProductCard($row) {
     return '
     <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
         <div class="card h-100 border-0 shadow product-card">
@@ -20,7 +24,7 @@ function generateProductCard($row) {
             </div>
             <div class="card-footer bg-white">
                 <button class="btn btn-primary btn-sm add-to-cart" data-product-id="' . $row['reference'] . '">Add to Cart</button>
-                <button class="btn btn-danger btn-sm admin-only-button" data-product-id="' . $row['reference'] . '">Admin Only</button>
+                ' . $adminButton . '
             </div>
         </div>
     </div>';
@@ -71,7 +75,7 @@ $result = mysqli_query($conn, $query);
 
 if (mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
-        echo generateProductCard($row);
+        echo generateProductCard($row,$isAdmin);
     }
 
     // Generate pagination links for regular query
@@ -107,7 +111,7 @@ $all_items_result = mysqli_query($conn, $all_items_query);
 
 if (mysqli_num_rows($all_items_result) > 0) {
     while ($row = mysqli_fetch_assoc($all_items_result)) {
-        echo generateProductCard($row);
+        echo generateProductCard($row, $isAdmin);
     }
 
     // Generate pagination links for "all items" query

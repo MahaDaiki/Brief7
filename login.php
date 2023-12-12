@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($password === $adminStoredPassword) {
             $_SESSION["admin_username"] = $username;
             $_SESSION["is_admin"] = true;
-    
+
             header("Location: index.php");
             exit();
         } else {

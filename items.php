@@ -34,9 +34,37 @@ session_start();
 
             <img width="48" src="img/user-286-128.png" alt="profile" class="user-pic">
 
-            <div class="menuwrp" id="subMenu">
+            <div class="menuwrp" id="subMenu" style="z-index: 99 ;">
                 <div class="submenu">
                     <div class="userinfo">
+                    <?php
+            
+            
+           
+            if (isset($_SESSION["admin_username"])) {
+              $displayName = $_SESSION["admin_username"];
+              $isAdmin = true;
+            } elseif (isset($_SESSION["username"])) {
+              $displayName = $_SESSION["username"];
+              $isAdmin = false;
+            } else {
+          
+              header("Location: index.php");
+              exit();
+            }
+            ?>
+            <div class="userinfo">
+              <img src="img/user-286-128.png" alt="user">
+              <h2>
+                <?php echo $displayName; ?>
+              </h2>
+              <hr>
+              <?php
+                    if ($isAdmin) {
+                        echo '<a href="adminpan.php">Admin Panel</a>';
+                    }
+                    ?>
+           
                         <div>
                             <a href="logout.php">Log Out</a>
                         </div>
@@ -52,7 +80,12 @@ session_start();
         <div class="col-md-3">
             <div class="list-group">
                 <h3>Category</h3>
-                <button class="btn btn-danger btn-sm admin-only-button" >Manage</button>
+                <?php
+                if ($isAdmin) {
+                    echo '<button class="btn btn-danger btn-sm admin-only-button">Manage</button>';
+                }
+                ?>
+              
                 <div>
                 <label>
                         <input type="checkbox" class="common_selector" id="sort_alphabetically"> Sort Alphabetically
