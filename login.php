@@ -1,5 +1,6 @@
 <?php
-session_start(); // Start the session
+
+session_start(); 
 require_once("config.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -8,19 +9,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $username = mysqli_real_escape_string($conn, $username);
 
-    // Check if it's an admin
+
     $adminResult = $conn->query("SELECT * FROM admins WHERE username = '$username'");
 
     if ($adminResult->num_rows > 0) {
         $adminRow = $adminResult->fetch_assoc();
         $adminStoredPassword = $adminRow["passw"];
-
-        // Verify the admin password (no hashing)
+    
+        
         if ($password === $adminStoredPassword) {
             $_SESSION["admin_username"] = $username;
             $_SESSION["is_admin"] = true;
-
-            header("Location: items.php");
+    
+            header("Location: index.php");
             exit();
         } else {
             echo "Error: Incorrect admin password.";
@@ -32,11 +33,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($userResult->num_rows > 0) {
             $userRow = $userResult->fetch_assoc();
             $hashedPassword = $userRow["passw"];
-
-            // Verify the user password
             if (password_verify($password, $hashedPassword)) {
                 $_SESSION["username"] = $username;
-                header("Location: items.php");
+                header("Location: index.php");
                 exit();
             } else {
                 echo "Error: Incorrect password.";
@@ -45,9 +44,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Error: User not found.";
         }
     }
-}
 
-$conn->close();
+    $conn->close();
+}
 ?>
 
 <!DOCTYPE html>
@@ -64,7 +63,7 @@ $conn->close();
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-4">
-                <form class="login-form" action="index.php" method="post">
+                <form class="login-form" action="login.php" method="post">
                     <h2 class="text-center mb-4">Login</h2>
                     <input class="form-control mb-2" type="text" id="username" name="username" placeholder="Username" required>
                     <input class="form-control mb-2" type="password" id="password" name="password" placeholder="Password" required>

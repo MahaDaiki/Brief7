@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <head>
@@ -16,7 +17,7 @@
 </head>
 
     <?php
-
+session_start();
         include("config.php");
 
 
@@ -51,6 +52,34 @@
             <div class="menuwrp" id="subMenu">
                 <div class="submenu">
                     <div class="userinfo">
+                    <?php
+            
+            
+           
+            if (isset($_SESSION["admin_username"])) {
+              $displayName = $_SESSION["admin_username"];
+              $isAdmin = true;
+            } elseif (isset($_SESSION["username"])) {
+              $displayName = $_SESSION["username"];
+              $isAdmin = false;
+            } else {
+              // Redirect to the login page if neither admin nor user is logged in
+              header("Location: index.php");
+              exit();
+            }
+            ?>
+            <div class="userinfo">
+              <img src="img/user-286-128.png" alt="user">
+              <h2>
+                <?php echo $displayName; ?>
+              </h2>
+              <hr>
+              <?php
+                    if ($isAdmin) {
+                        echo '<a href="adminpan.php">Admin Panel</a>';
+                    }
+                    ?>
+              <div>
                         <div>
                             <a href="logout.php">Log Out</a>
                         </div>
