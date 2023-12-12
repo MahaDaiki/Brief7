@@ -12,7 +12,7 @@ include("config.php");
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
-<body >
+<body>
 <nav class="navbar navbar-expand-sm navbar-dark ">
     <div class="container">
         <a href="#" class="navbar-brand">NE</a>
@@ -24,10 +24,10 @@ include("config.php");
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a href="home.php" class="nav-link">Home</a>
+                    <a href="index.php" class="nav-link">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a href="category.php" class="nav-link">Categories</a>
+                    <a href="items.php" class="nav-link">items</a>
                 </li>
             </ul>
 
@@ -51,7 +51,14 @@ include("config.php");
         <div class="col-md-3">
             <div class="list-group">
                 <h3>Category</h3>
+                <button class="btn btn-danger btn-sm admin-only-button" >Manage</button>
                 <div>
+                <label>
+                        <input type="checkbox" class="common_selector" id="sort_alphabetically"> Sort Alphabetically
+                    </label>
+                    <label>
+    <input type="checkbox" class="common_selector" id="stock_filter"> Stock Filter
+</label>
                     <?php
                     $query = "SELECT catname, imgs FROM Categories WHERE bl = 1 ORDER BY catname ASC";
                     $result = mysqli_query($conn, $query);
@@ -64,13 +71,12 @@ include("config.php");
                                 <img src="<?php echo $row['imgs']; ?>" alt="Category Image" style="width: 50px; height: 50px;">
                                 <?php echo $row['catname']; ?>
                             </label>
+                            
                         </div>
-                      
                         <?php
                     }
-                    ?><label>
-                      <input type="checkbox" class="common_selector" id="sort_alphabetically"> Sort Alphabetically
-                    </label>
+                    ?>
+                    
                 </div>
             </div>
         </div>
@@ -89,56 +95,92 @@ include("config.php");
     </div>
 </div>
 
-<script src="index.js"></script>
+
+
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        function filter_data() {
-            var action = 'fetch_data';
-            var category = get_filter('category');
-            var searchQuery = document.getElementById('search').value.trim(); // Get search query
+     document.addEventListener("DOMContentLoaded", function () {
+    function filter_data(page) {
+        var action = 'fetch_data';
+        var category = get_filter('category');
+        var searchQuery = document.getElementById('search').value.trim();
+        var sortAlphabetically = document.getElementById('sort_alphabetically').checked;
+        var stockFilter = document.getElementById('stock_filter').checked;
 
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "fetch_data.php", true);
-            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    document.querySelector('.filter_data').innerHTML = xhr.responseText;
-                }
-            };
-
-            var data = "action=" + action + "&category=" + JSON.stringify(category);
-
-            if (searchQuery !== '') {
-                data += "&search_query=" + searchQuery;
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "fetch_data.php", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                document.querySelector('.filter_data').innerHTML = xhr.responseText;
             }
+        };
 
-            xhr.send(data);
-        }
+        var data = "action=" + action +
+            "&category=" + JSON.stringify(category) +
+            "&search_query=" + searchQuery +
+            "&sort_alphabetically=" + (sortAlphabetically ? 1 : 0) +
+            "&stock_filter=" + (stockFilter ? 1 : 0) +
+            "&page=" + page;
 
-        function get_filter(class_name) {
-            var filter = [];
-            var checkboxes = document.querySelectorAll('.' + class_name + ':checked');
-            checkboxes.forEach(function (checkbox) {
-                filter.push(checkbox.value);
+        xhr.send(data);
+    }
+    function updatePaginationLinks(currentPage) {
+        var paginationContainer = document.getElementById('pagination');
+        if (paginationContainer) {
+            paginationContainer.addEventListener('click', function (e) {
+                if (e.target.classList.contains('page-link')) {
+                    e.preventDefault();
+                    var page = e.target.id;
+                    filter_data(page);
+                }
             });
-
-            return filter;
         }
+    }
 
-        document.getElementById('search').addEventListener('input', function () {
-            filter_data();
+
+    function get_filter(class_name) {
+        var filter = [];
+        var checkboxes = document.querySelectorAll('.' + class_name + ':checked');
+        checkboxes.forEach(function (checkbox) {
+            filter.push(checkbox.value);
         });
 
-        document.querySelectorAll('.common_selector').forEach(function (selector) {
-            selector.addEventListener('change', function () {
-                filter_data();
-            });
-        });
+        return filter;
+    }
 
-        // Initial load
-        filter_data();
+    document.getElementById('search').addEventListener('input', function () {
+        filter_data(1); // Reset to the first page when searching
     });
-</script>
+
+    document.querySelectorAll('.common_selector').forEach(function (selector) {
+        selector.addEventListener('change', function () {
+            filter_data(1); // Reset to the first page when changing filters
+        });
+    });
+
+    // Pagination Click
+    document.addEventListener('click', function (e) {
+        if (e.target.classList.contains('page')) {
+            var page = e.target.id;
+            filter_data(page);
+        }
+    });
+
+    // Initial load
+    filter_data(1);
+});
+
+</script> 
+<script src="index.js"></script>
+ <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+
+ <script src="index.js"></script>
+<script src="assets/js/home.js"></script>
+
 </body>
 
 </html>

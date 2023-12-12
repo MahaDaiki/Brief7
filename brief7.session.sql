@@ -1,7 +1,7 @@
 USE electronacerdb7;
 --@block
 CREATE TABLE clients (
-    id INT NOT NULL,
+    id INT NOT NULL AUTO_INCREMENT,
     fullname VARCHAR(250) NOT NULL,
     username VARCHAR(30) NOT NULL,
     email VARCHAR(250) NOT NULL UNIQUE,
@@ -9,7 +9,7 @@ CREATE TABLE clients (
     adresse VARCHAR(250),
     city VARCHAR(250),
     passw VARCHAR(220) NOT NULL,
-    valide BOOLEAN ,
+    valide BOOLEAN DEFAULT 0 ,
     PRIMARY KEY (id)
 );
 
@@ -26,18 +26,18 @@ INSERT INTO admins ( username , email ,passw) VALUES
 ('admin1','admin1@email.com','admin1');
 --@block
 CREATE TABLE orders(
-    order_id INT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     creation_date DATE,
     shipping_date DATE,
     delivery_date DATE,
     total_price DECIMAL(10, 2),
-    bl BOOLEAN ,
+    bl BOOLEAN DEFAULT 0,
     client_id INT,
     FOREIGN KEY (client_id) REFERENCES clients(id)
 );
 
 --@block
-CREATE TABLE Categories (
+CREATE TABLE categories (
     catname VARCHAR(50) PRIMARY KEY,
     descrip TEXT,
     imgs VARCHAR(250),
@@ -56,7 +56,7 @@ INSERT INTO categories ( catname , descrip ,imgs, bl) VALUES
     ('RAM','DDR,RGB RAM', 'img/catram.jpg',1);
 
 --@block
-CREATE TABLE Products (
+CREATE TABLE products (
     reference INT PRIMARY KEY,
     imgs VARCHAR(250),
     productname VARCHAR(255) NOT NULL,
@@ -83,8 +83,8 @@ INSERT INTO Products ( imgs, productname, barcode, purchase_price, final_price, 
     ('img/kingston-25-ssd.jpg','king stone ssd',123456789,500,700,NULL,'KING STONE',2,1,'SSD', true),
     ('img/cooler-master-masterliquid.jpg','cooler',354872873,1000,1500,1232,'liquid cooler',2,2,'Coolers', true),
     ('img/thermaltake-floe-dx-water.jpg','thermaltake',984756378,2000,3000,NULL,'water cooler',2,1,'Coolers', true),
-    ('img/gaming-monitor.jpg',' Monitor',127374914,2000,4500,NULL,'Gaming monitor',2,5,'Monitors', true),
-    ('img/monitor-24-msi.jpg',' Monitor',984538765,3000,6000,5242,'MCI MONITOR',2,3,'Monitors', true),
+    ('img/gaming-monitor.jpg','Monitor',127374914,2000,4500,NULL,'Gaming monitor',2,5,'Monitors', true),
+    ('img/monitor-24-msi.jpg','Monitor',984538765,3000,6000,5242,'MCI MONITOR',2,3,'Monitors', true),
     ('img/samsung-24-curvo.jpg','Samsung Monitor',647647382,5000,7000,NULL,'Samsung Curvo Monitor',2,1,'Monitors', true),
     ('img/gaming-mouse-razer-trinity.jpg','trinity razer mouse ',253984678,500,700,699,'trinity razer gaming',2,3,'Mouse', true),
     ('img/gaming-viper-ultimate-razer-mouse.jpg','viper mouse',836476538,700,900,NULL,'ultimate viper',2,1,'Mouse', true),
@@ -100,10 +100,13 @@ INSERT INTO Products ( imgs, productname, barcode, purchase_price, final_price, 
     ('img/c2.jpg','Black headset',2648465489,900,1200,NULL,'Wireless headset RGB',2,5,'Headsets', true);
 
 --@block
-CREATE TABLE OrderProduct(
+CREATE TABLE orderproduct(
     order_id INT,
     product_ref INT,
     quantity INT,
-    FOREIGN KEY (order_id) REFERENCES orders(order_id),
+    PRIMARY KEY(order_id, product_ref),
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
     FOREIGN KEY (product_ref) REFERENCES Products(reference)
 );
+ --@block
+ UPDATE products SET productname = 'Skytech Desktop gaming' WHERE products . reference = 17;
