@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
     // Insert user data into the clients table
-    $sql = "INSERT INTO clients (fullname, username, email, phonenumber, adresse, city, passw, valide) VALUES ('$fullname', '$username', '$email', $phonenumber, '$adresse', '$city', '$hashed_password', 1)";
+    $sql = "INSERT INTO clients (fullname, username, email, phonenumber, adresse, city, passw) VALUES ('$fullname', '$username', '$email', $phonenumber, '$adresse', '$city', '$hashed_password')";
 
     if ($conn->query($sql) === true) {
         echo '<div style="color: green; font-weight: bold; text-align: center;">User registered successfully.</div>';
