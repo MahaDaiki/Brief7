@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <head>
@@ -16,8 +17,8 @@
 </head>
 
     <?php
-
-      include("config.php");
+session_start();
+        include("config.php");
 
 
         $categoriesList = $conn->query("SELECT * FROM Categories;");
@@ -39,10 +40,10 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a href="home.php" class="nav-link">Home</a>
+                    <a href="index.php" class="nav-link">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a href="category.php" class="nav-link">Categories</a>
+                    <a href="items.php" class="nav-link">items</a>
                 </li>
             </ul>
 
@@ -51,6 +52,34 @@
             <div class="menuwrp" id="subMenu">
                 <div class="submenu">
                     <div class="userinfo">
+                    <?php
+            
+            
+           
+            if (isset($_SESSION["admin_username"])) {
+              $displayName = $_SESSION["admin_username"];
+              $isAdmin = true;
+            } elseif (isset($_SESSION["username"])) {
+              $displayName = $_SESSION["username"];
+              $isAdmin = false;
+            } else {
+              // Redirect to the login page if neither admin nor user is logged in
+              header("Location: index.php");
+              exit();
+            }
+            ?>
+            <div class="userinfo">
+              <img src="img/user-286-128.png" alt="user">
+              <h2>
+                <?php echo $displayName; ?>
+              </h2>
+              <hr>
+              <?php
+                    if ($isAdmin) {
+                        echo '<a href="adminpan.php">Admin Panel</a>';
+                    }
+                    ?>
+           
                         <div>
                             <a href="logout.php">Log Out</a>
                         </div>
