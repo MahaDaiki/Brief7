@@ -11,7 +11,7 @@
     <style>
         body {
             background-color: #f8f9fa;
-            padding: 20px;
+            
         }
 
         .product-container {
@@ -55,6 +55,34 @@
             <div class="menuwrp" id="subMenu">
                 <div class="submenu">
                     <div class="userinfo">
+                          <?php
+            
+            
+           
+            if (isset($_SESSION["admin_username"])) {
+              $displayName = $_SESSION["admin_username"];
+              $isAdmin = true;
+            } elseif (isset($_SESSION["username"])) {
+              $displayName = $_SESSION["username"];
+              $isAdmin = false;
+            } else {
+              // Redirect to the login page if neither admin nor user is logged in
+              header("Location: index.php");
+              exit();
+            }
+            ?>
+            <div class="userinfo">
+              <img src="img/user-286-128.png" alt="user">
+              <h2>
+                <?php echo $displayName; ?>
+              </h2>
+              <hr>
+              <?php
+                    if ($isAdmin) {
+                        echo '<a href="adminpan.php">Admin Panel</a>';
+                    }
+                    ?>
+           
                         <div>
                             <a href="logout.php">Log Out</a>
                         </div>
@@ -64,7 +92,7 @@
         </div>
     </div>
 </nav>
-    <div class="product-container">
+    <div class="product-container mt-3">
         <?php
         include("config.php");
 
@@ -91,7 +119,8 @@
                             <p><strong>Discount:</strong> DH' . $product['price_offer'] . '</p>
                             <p><strong>Description:</strong> ' . $product['descrip'] . '</p>
                             <p><strong>Category:</strong> ' . $product['category_name'] . '</p>
-                            <!-- Add more details as needed -->
+                            <p>barcode:'.$product['barcode'].'</p>
+                            <p>left in stock: ' . $product['stock_quantity'].'</p> 
                         </div>
                     </div>
                     
@@ -107,6 +136,11 @@
     </div>
 
     <script src="index.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="assets/js/home.js"></script>
+
 </body>
 
 </html>

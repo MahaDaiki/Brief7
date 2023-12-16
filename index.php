@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <head>
@@ -16,8 +17,8 @@
 </head>
 
     <?php
-
-      include("config.php");
+session_start();
+        include("config.php");
 
 
         $categoriesList = $conn->query("SELECT * FROM Categories;");
@@ -39,10 +40,10 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a href="home.php" class="nav-link">Home</a>
+                    <a href="index.php" class="nav-link">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a href="category.php" class="nav-link">Categories</a>
+                    <a href="items.php" class="nav-link">items</a>
                 </li>
             </ul>
 
@@ -51,6 +52,34 @@
             <div class="menuwrp" id="subMenu">
                 <div class="submenu">
                     <div class="userinfo">
+                    <?php
+            
+            
+           
+            if (isset($_SESSION["admin_username"])) {
+              $displayName = $_SESSION["admin_username"];
+              $isAdmin = true;
+            } elseif (isset($_SESSION["username"])) {
+              $displayName = $_SESSION["username"];
+              $isAdmin = false;
+            } else {
+              // Redirect to the login page if neither admin nor user is logged in
+              header("Location: index.php");
+              exit();
+            }
+            ?>
+            <div class="userinfo">
+              <img src="img/user-286-128.png" alt="user">
+              <h2>
+                <?php echo $displayName; ?>
+              </h2>
+              <hr>
+              <?php
+                    if ($isAdmin) {
+                        echo '<a href="adminpan.php">Admin Panel</a>';
+                    }
+                    ?>
+           
                         <div>
                             <a href="logout.php">Log Out</a>
                         </div>
@@ -161,8 +190,8 @@
         <div class="col-sm-6">
             <div class="card">
               <div class="card-body">
-                <h5 class="card-title">Swift Delivery, Exceptional Service</h5>
-                <p class="card-text">Experience the convenience of rapid delivery with our commitment to swift service. At ELECTRO-NACER, we prioritize your time, ensuring that your purchases reach your doorstep with speed and efficiency. Our fast delivery service is designed to exceed expectations, bringing your selected items to you in record time.</p>
+                <h5 class="card-title">High quality</h5>
+                <p class="card-text">Pieces selected with exceptional quality.<br>Our commitment to excellence ensures that each piece is carefully chosen and curated to meet the highest standards. Explore our collection and enjoy the epitome of craftsmanship and durability.</p>
                 <a href="#" class="btn btn-primary">Learn more</a>
               </div>
             </div>
@@ -171,8 +200,8 @@
         <div class="col-sm-6">
             <div class="card">
               <div class="card-body">
-                <h5 class="card-title">Swift Delivery, Exceptional Service</h5>
-                <p class="card-text">Experience the convenience of rapid delivery with our commitment to swift service. At ELECTRO-NACER, we prioritize your time, ensuring that your purchases reach your doorstep with speed and efficiency. Our fast delivery service is designed to exceed expectations, bringing your selected items to you in record time.</p>
+                <h5 class="card-title">Peace of Mind with Our Warranty</h5>
+                <p class="card-text">At ELECTRO-NACER, we stand behind the quality of our products. Every purchase comes with our commitment to your satisfaction and a comprehensive warranty for your peace of mind.</p>
                 <a href="#" class="btn btn-primary">Learn more</a>
               </div>
             </div>
@@ -191,14 +220,10 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-          </body>
-<<<<<<< HEAD
-=======
 
->>>>>>> main
 
 
  <script src="index.js"></script>
 <script src="assets/js/home.js"></script>
-<script src="index.js"></script>
+
 </body>
