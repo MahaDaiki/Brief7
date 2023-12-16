@@ -15,7 +15,7 @@ CREATE TABLE clients (
 
 --@block
 CREATE TABLE admins(
-    id INT PRIMARY KEY NOT NULL ,
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     username VARCHAR(100) NOT NULL,
     email VARCHAR(250) NOT NULL,
     passw VARCHAR(250) NOT NULL
@@ -57,7 +57,7 @@ INSERT INTO categories ( catname , descrip ,imgs, bl) VALUES
 
 --@block
 CREATE TABLE products (
-    reference INT PRIMARY KEY,
+    reference INT PRIMARY KEY AUTO_INCREMENT,
     imgs VARCHAR(250),
     productname VARCHAR(255) NOT NULL,
     barcode VARCHAR(10) NOT NULL,

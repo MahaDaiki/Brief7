@@ -1,15 +1,15 @@
 <?php
 session_start();
 
-// Check if the user is logged in and is an admin
-// if (isset($_SESSION["admin_username"])) {
-//     $isAdmin = true;
-// } elseif (isset($_SESSION["username"])) {
-//     $isAdmin = false;
-// } else {
-//     header("Location: index.php");
-//     exit();
-// }
+//Check if the user is logged in and is an admin
+if (isset($_SESSION["admin_username"])) {
+    $isAdmin = true;
+} elseif (isset($_SESSION["username"])) {
+    $isAdmin = false;
+} else {
+    header("Location: index.php");
+    exit();
+}
 
 // Establish a database connection (replace these with your actual database details)
 require_once("config.php");
@@ -63,45 +63,45 @@ $admins_result = $conn->query("SELECT * FROM admins");
 $order_result = $conn->query("SELECT * FROM orders");
 $order_detail = $conn->query("SELECT * FROM orders, clients, orderproduct WHERE orders.client_id = clients.id and orders.id = orderproduct.order_id");
 
-// function ShowDetail($ord){
-//     global $order_detail;
-//     echo '<div class="container mt-5">';
-//     echo '<h3 class="mt-5 text-center">Orders detail</h3>';
-//     echo '<table class="table">';
-//     echo '<thead>';
-//     echo '<tr>';
-//     echo '<th>order id</th>';
-//     echo '<th>client name</th>';
-//     echo '<th>creation date</th>';
-//     echo '<th>sending date</th>';
-//     echo '<th>delivring date</th>';
-//     echo '</tr>';
-//     echo '</thead>';
-//     $ord = $order_detail-> fetch_assoc();
-//     echo '<tbody>';
-//     echo '<tr>';
-//     echo "<td>{$ord['orders.id']}</td>";
-//     echo "<td>{$ord['clients.fullname']}</td>";
-//     echo "<td>{$ord['orders.creation_date']}</td>";
-//     echo "<td>{$ord['orders.shipping_date']}</td>";
-//     echo "<td>{$ord['orders.delivery_date']}</td>";
-//     echo '</tr>';
-//     echo '</tbody>';
-//     echo '</table>';
+function ShowDetail($ord){
+    global $order_detail;
+    echo '<div class="container mt-5">';
+    echo '<h3 class="mt-5 text-center">Orders detail</h3>';
+    echo '<table class="table">';
+    echo '<thead>';
+    echo '<tr>';
+    echo '<th>order id</th>';
+    echo '<th>client name</th>';
+    echo '<th>creation date</th>';
+    echo '<th>sending date</th>';
+    echo '<th>delivring date</th>';
+    echo '</tr>';
+    echo '</thead>';
+    $ord = $order_detail-> fetch_assoc();
+    echo '<tbody>';
+    echo '<tr>';
+    echo "<td>{$ord['orders.id']}</td>";
+    echo "<td>{$ord['clients.fullname']}</td>";
+    echo "<td>{$ord['orders.creation_date']}</td>";
+    echo "<td>{$ord['orders.shipping_date']}</td>";
+    echo "<td>{$ord['orders.delivery_date']}</td>";
+    echo '</tr>';
+    echo '</tbody>';
+    echo '</table>';
 
-//     echo '<h4>Product</h4>';
-//     echo '<table class="table">';
-//     echo '<thead>';
-//     echo '<tr>';
-//     echo '<th>order id</th>';
-//     echo '<th>order id</th>';
-//     echo '<th>order id</th>';
-//     echo '</tr>';
-//     echo '</thead>';
-//     echo '</table>';
-//     echo "<h5>Total Price:{}</h5>";
-//     echo '</div>';
-// }
+    echo '<h4>Product</h4>';
+    echo '<table class="table">';
+    echo '<thead>';
+    echo '<tr>';
+    echo '<th>order id</th>';
+    echo '<th>order id</th>';
+    echo '<th>order id</th>';
+    echo '</tr>';
+    echo '</thead>';
+    echo '</table>';
+    echo "<h5>Total Price:{}</h5>";
+    echo '</div>';
+}
 ?>
 
 <!DOCTYPE html>
@@ -135,16 +135,16 @@ $order_detail = $conn->query("SELECT * FROM orders, clients, orderproduct WHERE 
             <div class="submenu">
                 <div class="userinfo">
                     <?php
-                        // if (isset($_SESSION["admin_username"])) {
-                        //     $displayName = $_SESSION["admin_username"];
-                        //     $isAdmin = true;
-                        // } elseif (isset($_SESSION["username"])) {
-                        //     $displayName = $_SESSION["username"];
-                        //     $isAdmin = false;
-                        // } else {
-                        //     header("Location: index.php");
-                        //     exit();
-                        // }
+                        if (isset($_SESSION["admin_username"])) {
+                            $displayName = $_SESSION["admin_username"];
+                            $isAdmin = true;
+                        } elseif (isset($_SESSION["username"])) {
+                            $displayName = $_SESSION["username"];
+                            $isAdmin = false;
+                        } else {
+                            header("Location: index.php");
+                            exit();
+                        }
                     ?>
                     <div class="userinfo">
                         <img src="img/user-286-128.png" alt="user">
