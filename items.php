@@ -1,5 +1,6 @@
 <?php
 include("config.php");
+session_start();
 ?>
 
 <!DOCTYPE html>
@@ -33,9 +34,37 @@ include("config.php");
 
             <img width="48" src="img/user-286-128.png" alt="profile" class="user-pic">
 
-            <div class="menuwrp" id="subMenu">
+            <div class="menuwrp" id="subMenu" style="z-index: 99 ;">
                 <div class="submenu">
                     <div class="userinfo">
+                    <?php
+            
+            
+           
+            if (isset($_SESSION["admin_username"])) {
+              $displayName = $_SESSION["admin_username"];
+              $isAdmin = true;
+            } elseif (isset($_SESSION["username"])) {
+              $displayName = $_SESSION["username"];
+              $isAdmin = false;
+            } else {
+          
+              header("Location: index.php");
+              exit();
+            }
+            ?>
+            <div class="userinfo">
+              <img src="img/user-286-128.png" alt="user">
+              <h2>
+                <?php echo $displayName; ?>
+              </h2>
+              <hr>
+              <?php
+                    if ($isAdmin) {
+                        echo '<a href="adminpan.php">Admin Panel</a>';
+                    }
+                    ?>
+           
                         <div>
                             <a href="logout.php">Log Out</a>
                         </div>
@@ -51,8 +80,19 @@ include("config.php");
         <div class="col-md-3">
             <div class="list-group">
                 <h3>Category</h3>
-                <button class="btn btn-danger btn-sm admin-only-button" >Manage</button>
+                <?php
+                if ($isAdmin) {
+                    echo '<button class="btn btn-danger btn-sm admin-only-button">Manage</button>';
+                }
+                ?>
+              
                 <div>
+                <label>
+                        <input type="checkbox" class="common_selector" id="sort_alphabetically"> Sort Alphabetically
+                    </label>
+                    <label>
+    <input type="checkbox" class="common_selector" id="stock_filter"> Stock Filter
+</label>
                     <?php
                     $query = "SELECT catname, imgs FROM Categories WHERE bl = 1 ORDER BY catname ASC";
                     $result = mysqli_query($conn, $query);
@@ -70,12 +110,7 @@ include("config.php");
                         <?php
                     }
                     ?>
-                    <label>
-                        <input type="checkbox" class="common_selector" id="sort_alphabetically"> Sort Alphabetically
-                    </label>
-                    <label>
-    <input type="checkbox" class="common_selector" id="stock_filter"> Stock Filter
-</label>
+                    
                 </div>
             </div>
         </div>
@@ -96,60 +131,17 @@ include("config.php");
 
 
 
-<script>
-        document.addEventListener("DOMContentLoaded", function () {
-            function filter_data() {
-                var action = 'fetch_data';
-                var category = get_filter('category');
-                var searchQuery = document.getElementById('search').value.trim();
-                var sortAlphabetically = document.getElementById('sort_alphabetically').checked;
-                var stockFilter = document.getElementById('stock_filter').checked;
-
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", "fetch_data.php", true);
-                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                        document.querySelector('.filter_data').innerHTML = xhr.responseText;
-                    }
-                };
-
-                var data = "action=" + action +
-           "&category=" + JSON.stringify(category) +
-           "&search_query=" + searchQuery +
-           "&sort_alphabetically=" + (sortAlphabetically ? 1 : 0) +
-           "&stock_filter=" + (document.getElementById('stock_filter').checked ? 1 : 0);
-
-                xhr.send(data);
-            }
-
-            function get_filter(class_name) {
-                var filter = [];
-                var checkboxes = document.querySelectorAll('.' + class_name + ':checked');
-                checkboxes.forEach(function (checkbox) {
-                    filter.push(checkbox.value);
-                });
-
-                return filter;
-            }
-            document.getElementById('search').addEventListener('input', function () {
-            filter_data();
-        });
-            document.querySelectorAll('.common_selector').forEach(function (selector) {
-                selector.addEventListener('change', function () {
-                    filter_data();
-                });
-            });
-
-            return filter;
-        })
-        
-
-        // Initial load
-        filter_data();
-   
-</script> 
+<script src="filter.js"></script> 
 <script src="index.js"></script>
+ <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+
+ <script src="index.js"></script>
+<!-- <script src="assets/js/home.js"></script> -->
+
 </body>
 
 </html>
