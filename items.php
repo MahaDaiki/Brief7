@@ -34,12 +34,13 @@ session_start();
 
             <img width="48" src="img/user-286-128.png" alt="profile" class="user-pic">
 
-            <div class="menuwrp" id="subMenu" style="z-index: 99 ;">
+            <div class="menuwrp" id="subMenu">
                 <div class="submenu">
                     <div class="userinfo">
                     <?php
             
-            
+            $displayName = '';
+            $isAdmin = false;
            
             if (isset($_SESSION["admin_username"])) {
               $displayName = $_SESSION["admin_username"];
@@ -47,26 +48,26 @@ session_start();
             } elseif (isset($_SESSION["username"])) {
               $displayName = $_SESSION["username"];
               $isAdmin = false;
+            } if (empty($displayName)) {
+                echo '<a href="login.php">Login</a>';
             } else {
-          
-              header("Location: index.php");
-              exit();
-            }
-            ?>
-            <div class="userinfo">
-              <img src="img/user-286-128.png" alt="user">
-              <h2>
-                <?php echo $displayName; ?>
-              </h2>
-              <hr>
-              <?php
+                ?>
+                <div class="userinfo">
+                    <img src="img/user-286-128.png" alt="user">
+                    <h2>
+                        <?php echo $displayName; ?>
+                    </h2>
+                    <hr>
+                    <?php
                     if ($isAdmin) {
-                        echo '<a href="adminpan.php">Admin Panel</a>';
+                        echo '<a href="adminpan.php">Admin Panel </a><br>';
                     }
+                    echo '<a href="logout.php">Logout</a>'; 
                     ?>
-           
-                        <div>
-                            <a href="logout.php">Log Out</a>
+                    <div>
+    <?php
+}
+?>
                         </div>
                     </div>
                 </div>
@@ -74,7 +75,6 @@ session_start();
         </div>
     </div>
 </nav>
-
 <div class="container">
     <div class="row">
         <div class="col-md-3">
