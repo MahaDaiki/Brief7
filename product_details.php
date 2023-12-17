@@ -55,8 +55,37 @@
             <div class="menuwrp" id="subMenu">
                 <div class="submenu">
                     <div class="userinfo">
-                        <div>
-                            <a href="logout.php">Log Out</a>
+                    <?php
+            
+            $displayName = '';
+            $isAdmin = false;
+           
+            if (isset($_SESSION["admin_username"])) {
+              $displayName = $_SESSION["admin_username"];
+              $isAdmin = true;
+            } elseif (isset($_SESSION["username"])) {
+              $displayName = $_SESSION["username"];
+              $isAdmin = false;
+            } if (empty($displayName)) {
+                echo '<a href="login.php">Login</a>';
+            } else {
+                ?>
+                <div class="userinfo">
+                    <img src="img/user-286-128.png" alt="user">
+                    <h2>
+                        <?php echo $displayName; ?>
+                    </h2>
+                    <hr>
+                    <?php
+                    if ($isAdmin) {
+                        echo '<a href="adminpan.php">Admin Panel </a><br>';
+                    }
+                    echo '<a href="logout.php">Logout</a>'; 
+                    ?>
+                    <div>
+    <?php
+}
+?>
                         </div>
                     </div>
                 </div>

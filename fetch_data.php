@@ -1,7 +1,11 @@
 <?php
+session_start();
 include("config.php");
+$isAdmin = isset($_SESSION['is_admin']);
+function generateProductCard($row,$isAdmin) {
+   
+    $adminButton = $isAdmin ? '<button class="btn btn-danger btn-sm admin-only-button" data-product-id="' . $row['reference'] . '">Modify</button>' : '';
 
-function generateProductCard($row) {
     return '
     <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
         <div class="card h-100 border-0 shadow product-card">
@@ -20,17 +24,17 @@ function generateProductCard($row) {
             </div>
             <div class="card-footer bg-white">
                 <button class="btn btn-primary btn-sm add-to-cart" data-product-id="' . $row['reference'] . '">Add to Cart</button>
-                <button class="btn btn-danger btn-sm admin-only-button" data-product-id="' . $row['reference'] . '">Admin Only</button>
+                ' . $adminButton . '
             </div>
         </div>
     </div>';
 }
 
-
-$page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+if(isset($_POST['page'])) {
+    $page = $_POST['page'];
+}
 $limit = 8;
 $offset = ($page - 1) * $limit;
-
 // Check if sorting alphabetically is requested
 $sortAlphabetically = isset($_POST['sort_alphabetically']) ? (bool)$_POST['sort_alphabetically'] : false;
 
@@ -66,26 +70,25 @@ if ($sortAlphabetically) {
 
 // Count total rows without LIMIT for pagination
 $total_regular_items = mysqli_num_rows(mysqli_query($conn, $query));
-
 $query .= " LIMIT $offset, $limit";
 $result = mysqli_query($conn, $query);
 
 if (mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
-        echo generateProductCard($row);
+        echo generateProductCard($row,$isAdmin);
     }
 
     // Generate pagination links for regular query
     $total_regular_pages = ceil($total_regular_items / $limit);
     echo '<ul class="pagination">';
     for ($i = 1; $i <= $total_regular_pages; $i++) {
-        echo '<li class="page-item"><a class="page-link" href="#" id="' . $i . '">' . $i . '</a></li>';
+        echo '<li class="page-item"><a class="page-link pagination-link" href="#" onclick="filter_data(' . $i . ')" id="' . $i . '">' . $i . '</a></li>';
     }
     echo '</ul>';
 } 
 
 
-// "All items" query
+else{
 $all_items_query = "SELECT * FROM Products WHERE bl = 1";
 
 if ($searchFilter != '') {
@@ -100,26 +103,24 @@ if ($sortAlphabetically) {
     $all_items_query .= " ORDER BY productname ASC";
 }
 
-// Count total rows without LIMIT for pagination
+
 $total_all_items = mysqli_num_rows(mysqli_query($conn, $all_items_query));
 
 $all_items_query .= " LIMIT $offset, $limit";
 $all_items_result = mysqli_query($conn, $all_items_query);
 
-if (mysqli_num_rows($all_items_result) > 0) {
+if  (mysqli_num_rows($all_items_result) > 0) {
     while ($row = mysqli_fetch_assoc($all_items_result)) {
-        echo generateProductCard($row);
+        echo generateProductCard($row, $isAdmin);
     }
 
-    // Generate pagination links for "all items" query
+}
     $total_all_pages = ceil($total_all_items / $limit);
     echo '<ul class="pagination">';
     for ($i = 1; $i <= $total_all_pages; $i++) {
-        echo '<li class="page-item"><a class="page-link" href="#" id="' . $i . '">' . $i . '</a></li>';
+        echo '<li class="page-item"><a class="page-link pagination-link" href="#" onclick="filter_data(' . $i . ')" id="' . $i . '">' . $i . '</a></li>';
     }
     echo '</ul>';
 } 
-
 ?>
-   
 

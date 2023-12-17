@@ -1,5 +1,6 @@
 <?php
-session_start(); // Start the session
+
+session_start(); 
 require_once("config.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -8,14 +9,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $username = mysqli_real_escape_string($conn, $username);
 
-    // Check if it's an admin
+
     $adminResult = $conn->query("SELECT * FROM admins WHERE username = '$username'");
 
     if ($adminResult->num_rows > 0) {
         $adminRow = $adminResult->fetch_assoc();
         $adminStoredPassword = $adminRow["passw"];
-
-        // Verify the admin password (no hashing)
+    
+        
         if ($password === $adminStoredPassword) {
             $_SESSION["admin_username"] = $username;
             $_SESSION["is_admin"] = true;
@@ -32,11 +33,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($userResult->num_rows > 0) {
             $userRow = $userResult->fetch_assoc();
             $hashedPassword = $userRow["passw"];
-
-            // Verify the user password
             if (password_verify($password, $hashedPassword)) {
                 $_SESSION["username"] = $username;
-                header("Location: items.php");
+                header("Location: index.php");
                 exit();
             } else {
                 echo "Error: Incorrect password.";
@@ -45,9 +44,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Error: User not found.";
         }
     }
-}
 
-$conn->close();
+    $conn->close();
+}
 ?>
 
 <!DOCTYPE html>
@@ -60,11 +59,72 @@ $conn->close();
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body style="background: linear-gradient(to right, #3498db, #5dade2, #85c1e9);">
+<nav class="navbar navbar-expand-sm navbar-dark ">
+    <div class="container">
+        <a href="#" class="navbar-brand">NE</a>
+        
+        <!-- Add the burger menu button for smaller screens -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="index.php" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="items.php" class="nav-link">items</a>
+                </li>
+            </ul>
+
+            <img width="48" src="img/user-286-128.png" alt="profile" class="user-pic">
+
+            <div class="menuwrp" id="subMenu">
+                <div class="submenu">
+                    <div class="userinfo">
+                    <?php
+            
+            $displayName = '';
+            $isAdmin = false;
+           
+            if (isset($_SESSION["admin_username"])) {
+              $displayName = $_SESSION["admin_username"];
+              $isAdmin = true;
+            } elseif (isset($_SESSION["username"])) {
+              $displayName = $_SESSION["username"];
+              $isAdmin = false;
+            } if (empty($displayName)) {
+                echo '<a href="login.php">Login</a>';
+            } else {
+                ?>
+                <div class="userinfo">
+                    <img src="img/user-286-128.png" alt="user">
+                    <h2>
+                        <?php echo $displayName; ?>
+                    </h2>
+                    <hr>
+                    <?php
+                    if ($isAdmin) {
+                        echo '<a href="adminpan.php">Admin Panel </a><br>';
+                    }
+                    echo '<a href="logout.php">Logout</a>'; 
+                    ?>
+                    <div>
+    <?php
+}
+?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
 <div class="overlay"></div>
     <div class="container">
-        <div class="row justify-content-center">
+        <div class="row justify-content-center mt-4">
             <div class="col-md-4">
-                <form class="login-form" action="index.php" method="post">
+                <form class="login-form" action="login.php" method="post">
                     <h2 class="text-center mb-4">Login</h2>
                     <input class="form-control mb-2" type="text" id="username" name="username" placeholder="Username" required>
                     <input class="form-control mb-2" type="password" id="password" name="password" placeholder="Password" required>
