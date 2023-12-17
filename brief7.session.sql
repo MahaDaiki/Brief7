@@ -71,7 +71,7 @@ CREATE TABLE products (
     FOREIGN KEY (category_name) REFERENCES Categories(catname) ON DELETE CASCADE,
     bl BOOLEAN
 );
-    --@block
+--@block
 INSERT INTO Products ( imgs, productname, barcode, purchase_price, final_price, price_offer, descrip, min_quantity, stock_quantity, category_name, bl) VALUES 
  ('img/ram1.jpg', 'Ram 8gb',235467896, 300, 450, 435 , 'Ram 8gb', 2, 20, 'RAM',  true ),
     ('img/ram2.jpg', 'Ram',235454896, 350, 450, 393 , 'Ram gb', 2, 20, 'RAM', true),
