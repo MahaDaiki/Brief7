@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
 
-    
 </head>
 
 
@@ -35,8 +34,12 @@
 
 
       include("config.php");
+      // Get products data from local storage and convert it to php array
       $productsList = $conn->query("SELECT * FROM Products WHERE stock_quantity > 15;");
       
+
+
+      // Quantity change +1
       function incrementQuantity($productId) {
         foreach ($productsList as $product) {
           if ($product['reference'] == $productId) {
@@ -48,6 +51,7 @@
       }
 
 
+      // Quantity change -1
       function decrementQuantity($productId) {
         foreach ($productsList as $product) {
           if ($product['reference'] == $productId) {

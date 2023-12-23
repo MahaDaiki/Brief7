@@ -110,3 +110,12 @@ CREATE TABLE orderproduct(
 );
  --@block
  UPDATE products SET productname = 'Skytech Desktop gaming' WHERE products . reference = 17;
+
+
+ create table BasketProducts(
+    product_id int primary key,
+    foreign key (product_id) references products(reference),
+    quantity int default 1
+ );
+
+ describe BasketProducts;
