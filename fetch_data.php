@@ -4,7 +4,8 @@ include("config.php");
 $isAdmin = isset($_SESSION['is_admin']);
 function generateProductCard($row,$isAdmin) {
    
-    $adminButton = $isAdmin ? '<button class="btn btn-danger btn-sm admin-only-button" data-product-id="' . $row['reference'] . '">Modify</button>' : '';
+    $adminButton = $isAdmin ? '<a href="Modify.php?product_id=' . $row['reference'] . '" class="btn btn-danger btn-sm admin-only-button">Modify</a>' : '';
+
 
     return '
     <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
