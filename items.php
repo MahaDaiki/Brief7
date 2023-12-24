@@ -82,9 +82,13 @@ session_start();
                 <h3>Category</h3>
                 <?php
                 if ($isAdmin) {
-                    echo '<button class="btn btn-danger btn-sm admin-only-button">Manage</button>';
-                }
-                ?>
+                        echo '<div class="my-2">
+                        <a class="btn btn-outline-primary" href=add.php>ADD</a>
+                        <a class="btn btn-outline-danger mx-3" href=Manage.php>Manage</a>
+                        </div>';
+    }
+    ?>
+          
               
                 <div>
                 <label>

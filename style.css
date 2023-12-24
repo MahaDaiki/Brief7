@@ -85,4 +85,8 @@ body {
     .nav-link {
       color: #fff;
     }
-  
+    .product-card:hover {
+      cursor: pointer;
+      transform: scale(1.1);
+      transition: transform 0.3s ease;
+  }
