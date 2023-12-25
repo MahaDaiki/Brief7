@@ -34,46 +34,59 @@
 
 
       include("config.php");
-      // Get products data from local storage and convert it to php array
-      $productsList = $conn->query("SELECT * FROM Products WHERE stock_quantity > 15;");
+
+
+
+      session_start();
+      //Get Products data
+      $productsList = $conn->query("SELECT * FROM products WHERE reference in (SELECT product_id from BasketProducts);");
+
+
+      // Get BasketProducts data and convert it to php array
+      if(!isset($_SESSION['basketproducts'])) {
+        $basketProductsList = $conn->query("SELECT * FROM BasketProducts")->fetch_all(MYSQLI_ASSOC);
+      } else {
+        $_SESSION['basketproducts'] = $basketProductsList;
+      }
       
 
-
-      // Quantity change +1
-      function incrementQuantity($productId) {
-        foreach ($productsList as $product) {
-          if ($product['reference'] == $productId) {
-            $product['stock_quantity'] = $product['stock_quantity'] + 1;
-            $productsList[0]['stock_quantity'] = 5;
-            break;
-          }
-        }
+      // Convert the result to a PHP array
+      $basketArray = [];
+      foreach ($basketProductsList as $product) {
+          $basketArray[$product['product_id']] = [
+              'product_id' => $product['product_id'],
+              'quantity' => $product['quantity']
+          ];
       }
 
 
-      // Quantity change -1
-      function decrementQuantity($productId) {
-        foreach ($productsList as $product) {
-          if ($product['reference'] == $productId) {
-            $product['stock_quantity'] = $product['stock_quantity'] - 1;
-            break;
-          }
-        }
-      }
+      // // Quantity change +1
+      // function incrementQuantity($productId) {
+      //   $basketArray[$productId]['quantity'] +=  1;
+      //   showProducts($productsList, $basketArray);
+      // }
+
+
+      // // Quantity change -1
+      // function decrementQuantity($productId) {
+      //   $basketArray[$productId]['quantity'] -= 1;
+      //   showProducts($productsList, $basketArray);
+      // }
+
 
 
       
-      showProducts($productsList);
+      showProducts($productsList, $basketArray);
 
 
 
 
 
-    function showProducts($productsList) {
+    function showProducts($productsList, $basketArray) {
       echo "<section id ='basket-items-container' class='basket-items-container'>";
       
       while($product = $productsList->fetch_assoc()) {
-        echo "<script>alert('".$product['stock_quantity']."');</script>";
+        $productId = $product["reference"];
 
           echo "<div class='basket-item-container'>";
           echo "<img src='" . $product['imgs'] . "'>";
@@ -82,7 +95,7 @@
           echo "<p>" . $product['descrip'] . "</p>";
           echo "<p>" . number_format($product['final_price'], 2) . " DH</p>";
           echo "<div>";
-          echo "<button class='items-number'>" . $product['stock_quantity'] . "</button>";
+          echo "<button class='items-number'>" . $basketArray[$product["reference"]]['quantity'] . "</button>";
           echo '<a href="basket.php?add_item=' . $product["reference"] . '" class="button_a">+</a>';
           echo '<a href="basket.php?remove_item=' . $product["reference"] . '" class="button_a">-</a>';
           echo "</div>";
@@ -98,23 +111,33 @@
   
 
 
+    
+    if($_SERVER["REQUEST_METHOD"] == "GET") {
 
+      if(isset($_GET["add_item"])) {
+        $basketProductsList = $_SESSION['basketproducts'];
 
-
-
-    if($_SERVER['REQUEST_METHOD'] == 'GET') {
-      if(isset($_GET['add_item'])) {
-        $id = $_GET['add_item'];
-        incrementQuantity($id);
-        showProducts();
+        $productId = $_GET["add_item"];
+        $basketArray[$productId]['quantity'] += 1;
+        $_SESSION['basketproducts'] = $basketProductsList;
+        showProducts($productsList, $basketArray);
       }
+      if(isset($_GET["remove_item"])) {
+        $basketProductsList = $_SESSION['basketproducts'];
+        
+        $productId = $_GET["remove_item"];
+        $basketArray[$productId]['quantity'] -=  1;
+        echo "<script>alert('".$basketArray[$productId]['quantity']."')</script>";
 
-      if(isset($_GET['remove_item'])) {
-        $id = $_GET['remove_item'];
-        desincrementQuantity($id);
-
+        $_SESSION['basketproducts'] = $basketProductsList;
+        showProducts($productsList, $basketArray);
       }
     }
+
+
+
+
+
     ?>
 
 

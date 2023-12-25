@@ -23,7 +23,7 @@ function generateProductCard($row,$isAdmin) {
                 </p>
             </div>
             <div class="card-footer bg-white">
-                <button class="btn btn-primary btn-sm add-to-cart" data-product-id="' . $row['reference'] . '">Add to Cart</button>
+                <a class="btn btn-primary href="items.php?productId=' . $row['reference'] .'" btn-sm add-to-cart" data-product-id="' . $row['reference'] . '">Add to Cart</a>
                 ' . $adminButton . '
             </div>
         </div>
