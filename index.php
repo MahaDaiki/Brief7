@@ -49,10 +49,28 @@
                 </li>
             </ul>
             <span class="navbar-text">
-    <a href="basket.php" class="nav-link">
-        <i class="fas fa-shopping-cart"></i>
+    <a href="#" class="nav-link" data-toggle="modal" data-target="#cartModal">
+        <i class="fas fa-shopping-cart"></i> 
     </a>
 </span>
+            <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cartModalLabel">Shopping Cart</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="cartItems">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="checkout()">Checkout</button>
+            </div>
+        </div>
+    </div>
+</div>
             <img width="48" src="img/user-286-128.png" alt="profile" class="user-pic">
 
             <div class="menuwrp" id="subMenu">
