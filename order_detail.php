@@ -1,3 +1,8 @@
+<?php
+include("config.php");
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -55,36 +60,34 @@
             <div class="menuwrp" id="subMenu">
                 <div class="submenu">
                     <div class="userinfo">
-                          <?php
-            
-            
-           
-            if (isset($_SESSION["admin_username"])) {
-              $displayName = $_SESSION["admin_username"];
-              $isAdmin = true;
-            } elseif (isset($_SESSION["username"])) {
-              $displayName = $_SESSION["username"];
-              $isAdmin = false;
-            } else {
-              // Redirect to the login page if neither admin nor user is logged in
-              header("Location: index.php");
-              exit();
-            }
-            ?>
-            <div class="userinfo">
-              <img src="img/user-286-128.png" alt="user">
-              <h2>
-                <?php echo $displayName; ?>
-              </h2>
-              <hr>
-              <?php
-                    if ($isAdmin) {
-                        echo '<a href="adminpan.php">Admin Panel</a>';
-                    }
-                    ?>
-           
-                        <div>
-                            <a href="logout.php">Log Out</a>
+                        <?php
+                        if (isset($_SESSION["admin_username"])) {
+                        $displayName = $_SESSION["admin_username"];
+                        $isAdmin = true;
+                        } elseif (isset($_SESSION["username"])) {
+                        $displayName = $_SESSION["username"];
+                        $isAdmin = false;
+                        } else {
+                        // Redirect to the login page if neither admin nor user is logged in
+                        header("Location: index.php");
+                        exit();
+                        }
+                        ?>
+                        <div class="userinfo">
+                            <img src="img/user-286-128.png" alt="user">
+                            <h2>
+                                <?php echo $displayName; ?>
+                            </h2>
+                            <hr>
+                            <?php
+                            if ($isAdmin) {
+                                echo '<a href="adminpan.php">Admin Panel</a>';
+                            }
+                            ?>
+                        
+                            <div>
+                                <a href="logout.php">Log Out</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -92,48 +95,82 @@
         </div>
     </div>
 </nav>
-    <div class="product-container mt-3">
         <?php
-        include("config.php");
 
         // Check if the 'reference' parameter is present in the URL
         if (isset($_GET['reference'])) {
-            $reference = mysqli_real_escape_string($conn, $_GET['reference']);
-
+            $order_id = $_GET['reference'];
             // Fetch product details from the database based on the reference
-            $query = "SELECT * FROM Products WHERE reference = '$reference' AND bl = 1";
-            $result = mysqli_query($conn, $query);
+            $order_result = $conn->query("SELECT orders.id, clients.fullname, orders.creation_date, orders.shipping_date, orders.delivery_date, orders.total_price
+                                FROM orders  INNER JOIN clients 
+                                ON orders.client_id=clients.id WHERE orders.id=$order_id");
+            $order_prod_result = $conn->query("SELECT products.reference, products.productname, products.purchase_price, orderproduct.quantity 
+                                                FROM products INNER JOIN orderproduct
+                                                ON orderproduct.product_ref = products.reference WHERE orderproduct.order_id=$order_id");
 
-            if ($result && mysqli_num_rows($result) > 0) {
-                $product = mysqli_fetch_assoc($result);
+            if (!empty($order_result)) {
+                    $ord=$order_result->fetch_assoc();
 
-                // Display product details
-                echo '
-                    <div class="row">
-                        <div class="col-md-6">
-                            <img src="' . $product['imgs'] . '" alt="' . $product['productname'] . '" class="product-image">
-                        </div>
-                        <div class="col-md-6">
-                            <h1>' . $product['productname'] . '</h1>
-                            <p><strong>Price:</strong> DH' . $product['final_price'] . '</p>
-                            <p><strong>Discount:</strong> DH' . $product['price_offer'] . '</p>
-                            <p><strong>Description:</strong> ' . $product['descrip'] . '</p>
-                            <p><strong>Category:</strong> ' . $product['category_name'] . '</p>
-                            <p>barcode:'.$product['barcode'].'</p>
-                            <p>left in stock: ' . $product['stock_quantity'].'</p> 
-                        </div>
-                    </div>
+                // Display order details 
+                    echo '<div class="row">';
+                    echo '<div class="container mt-5">';
+                    echo '<h3 class="mt-5 text-center">Orders detail</h3>';
+                    echo '<table class="table">';
+                    echo '<thead>';
+                    echo '<tr>';
+                    echo '<th>order id</th>';
+                    echo '<th>client name</th>';
+                    echo '<th>creation date</th>';
+                    echo '<th>sending date</th>';
+                    echo '<th>delivring date</th>';
+                    echo '</tr>';
+                    echo '</thead>';
+                    // $ord = $order_detail-> fetch_assoc();
+                    echo '<tbody>';
+                    echo '<tr>';
+                    echo "<td>{$ord['id']}</td>";
+                    echo "<td>{$ord['fullname']}</td>";
+                    echo "<td>{$ord['creation_date']}</td>";
+                    echo "<td>{$ord['shipping_date']}</td>";
+                    echo "<td>{$ord['delivery_date']}</td>";
+                    echo '</tr>';
+                    echo '</tbody>';
+                    echo '</table>';
+                
+                    echo '<h4>Ordered products</h4>';
+                    echo '<table class="table">';
+                    echo '<thead>';
+                    echo '<tr>';
+                    echo '<th>Reference</th>';
+                    echo '<th>Product</th>';
+                    echo '<th>Quantity</th>';
+                    echo '<th>Total price</th>';
+                    echo '</tr>';
+                    echo '</thead>';
+                    echo '<tbody>';
+                    while($ord_prod = $order_prod_result->fetch_assoc()){
+                        echo '<tr>';
+                        echo "<td>{$ord_prod['reference']}</td>";
+                        echo "<td>{$ord_prod['productname']}</td>";
+                        echo "<td>{$ord_prod['quantity']}</td>";
+                        $prod_price = $ord_prod['purchase_price']*$ord_prod['quantity'];
+                        echo "<td>{$prod_price}</td>";
+                        echo '</tr>';
+                    }
+                    echo '</tbody>';
+                    echo '</table>';
+                    echo "<h5>Order's total Price:{$ord['total_price']}</h5>";
+                    echo '</div>';
+                    echo '</div>';
                     
-                    <a href="index.php" class="btn btn-primary mt-3">Back to Products</a>
-                ';
+                    echo '<a href="adminpan.php" class="btn btn-primary mt-3">Back to Panel</a>';
             } else {
-                echo '<div class="alert alert-danger" role="alert">Product not found.</div>';
+                echo '<div class="alert alert-danger" role="alert">Order not found.</div>';
             }
         } else {
-            echo '<div class="alert alert-danger" role="alert">Invalid request. Please provide a product reference.</div>';
+            echo '<div class="alert alert-danger" role="alert">Invalid request. Please provide an order reference.</div>';
         }
         ?>
-    </div>
 
     <script src="index.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

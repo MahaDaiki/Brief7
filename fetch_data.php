@@ -4,7 +4,8 @@ include("config.php");
 $isAdmin = isset($_SESSION['is_admin']);
 function generateProductCard($row,$isAdmin) {
    
-    $adminButton = $isAdmin ? '<button class="btn btn-danger btn-sm admin-only-button" data-product-id="' . $row['reference'] . '">Modify</button>' : '';
+    $adminButton = $isAdmin ? '<a href="Modify.php?product_id=' . $row['reference'] . '" class="btn btn-danger btn-sm admin-only-button">Modify</a>' : '';
+
 
     return '
     <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
@@ -23,7 +24,7 @@ function generateProductCard($row,$isAdmin) {
                 </p>
             </div>
             <div class="card-footer bg-white">
-                <button class="btn btn-primary btn-sm add-to-cart" data-product-id="' . $row['reference'] . '">Add to Cart</button>
+                <a class="btn btn-primary href="items.php?productId=' . $row['reference'] .'" btn-sm add-to-cart" data-product-id="' . $row['reference'] . '">Add to Cart</a>
                 ' . $adminButton . '
             </div>
         </div>
@@ -88,7 +89,7 @@ if (mysqli_num_rows($result) > 0) {
 } 
 
 
-// "All items" query
+else{
 $all_items_query = "SELECT * FROM Products WHERE bl = 1";
 
 if ($searchFilter != '') {
@@ -103,18 +104,18 @@ if ($sortAlphabetically) {
     $all_items_query .= " ORDER BY productname ASC";
 }
 
-// Count total rows without LIMIT for pagination
+
 $total_all_items = mysqli_num_rows(mysqli_query($conn, $all_items_query));
 
 $all_items_query .= " LIMIT $offset, $limit";
 $all_items_result = mysqli_query($conn, $all_items_query);
 
-if (mysqli_num_rows($all_items_result) > 0) {
+if  (mysqli_num_rows($all_items_result) > 0) {
     while ($row = mysqli_fetch_assoc($all_items_result)) {
         echo generateProductCard($row, $isAdmin);
     }
 
-    // Generate pagination links for "all items" query
+}
     $total_all_pages = ceil($total_all_items / $limit);
     echo '<ul class="pagination">';
     for ($i = 1; $i <= $total_all_pages; $i++) {
