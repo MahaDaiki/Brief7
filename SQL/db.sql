@@ -1,6 +1,6 @@
-drop database electronacerdb7;
-create database electronacerdb7;
-USE electronacerdb7;
+drop database electronacerb7;
+create database electronacerb7;
+
 --@block
 CREATE TABLE clients (
     id INT NOT NULL,

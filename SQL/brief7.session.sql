@@ -25,11 +25,11 @@ CREATE TABLE admins(
 INSERT INTO admins ( username , email ,passw) VALUES
 ('admin1','admin1@email.com','admin1');
 --@block
-CREATE TABLE orders(
+CREATE TABLE orders (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    creation_date DATE,
-    shipping_date DATE,
-    delivery_date DATE,
+    creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    shipping_date DATETIME DEFAULT (CURRENT_TIMESTAMP + INTERVAL 3 DAY),
+    delivery_date DATETIME DEFAULT (CURRENT_TIMESTAMP + INTERVAL 6 DAY),
     total_price DECIMAL(10, 2),
     bl BOOLEAN DEFAULT 0,
     client_id INT,
@@ -105,7 +105,7 @@ CREATE TABLE orderproduct(
     product_ref INT,
     quantity INT,
     PRIMARY KEY(order_id, product_ref),
-    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
     FOREIGN KEY (product_ref) REFERENCES Products(reference)
 );
  --@block

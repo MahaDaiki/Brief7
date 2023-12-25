@@ -49,8 +49,8 @@ session_start();
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <!-- <button type="button" class="btn btn-primary" onclick="checkout()">Checkout</button> -->
-                <a href="" class="btn btn-primary">Checkout</a>
+                <button type="button" class="btn btn-primary" onclick="checkout()">Checkout</button>
+                
             </div>
         </div>
     </div>

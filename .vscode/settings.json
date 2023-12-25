@@ -10,7 +10,7 @@
             "port": 3306,
             "driver": "MySQL",
             "name": "brief7",
-            "database": "electronacerdb7",
+            "database": "electronacerb7",
             "username": "root"
         }
     ]

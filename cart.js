@@ -46,6 +46,7 @@
           `;
           cartItemsContainer.appendChild(cartItemDiv);
       });
+      localStorage.setItem('cartItems', JSON.stringify(cartItems));
   }
 
   // Function to modify the quantity of an item in the cart
@@ -73,70 +74,35 @@
       // Update the cart modal with the current items
       updateCartModal();
   }
+//   function checkout() {
+//     // Send the cart items to the server using AJAX
+//     var xhr = new XMLHttpRequest();
+//     xhr.onreadystatechange = function () {
+//         if (xhr.readyState === XMLHttpRequest.DONE) {
+//             if (xhr.status === 200) {
+//                 // If the request was successful, you can handle the response here
+//                 console.log(xhr.responseText);
+//                 // You may want to redirect the user or show a success message
+//                 alert("Checkout successful!");
+//                 // Clear the cart after checkout
+//                 cartItems = [];
+//                 updateCartModal();
+//             } else {
+//                 // If the request failed, handle the error
+//                 console.error(xhr.statusText);
+//                 alert("Checkout failed. Please try again.");
+//             }
+//         }
+//     };
 
-  // Function to handle the checkout button click
-  function checkout() {
-       function checkout() {
-        // Check if the user is logged in (replace with your actual authentication logic)
-        var isLoggedIn = checkUserLoggedIn();
+//     // Prepare the data to send to the server
+//     var data = JSON.stringify(cartItems);
 
-        if (isLoggedIn) {
-            // Calculate total price
-            var totalPrice = calculateTotalPrice();
+//     xhr.open("POST", "Checkout.php", true);
+//     xhr.setRequestHeader("Content-Type", "application/json");
 
-            // Create an order object
-            var order = {
-                creation_date: getCurrentDate(),
-                total_price: totalPrice,
-                bl: 0 // Assuming bl should be set to 0 by default
-                // Add other fields as needed
-            };
+//     // Send the data
+//     xhr.send(data);
+// }
 
-            // Add the order to the database (replace with your server-side logic)
-            addOrderToDatabase(order);
 
-            // Clear the cart
-            cartItems = [];
-            updateCartModal();
-
-            // Display a success message or redirect to a confirmation page
-            alert('Order placed successfully!');
-
-        } else {
-            // User is not logged in, display a login prompt or redirect to the login page
-            alert('Please log in before checking out.');
-            // You can redirect to the login page using window.location.href = 'login.php';
-        }
-    }
-
-    // Function to check if the user is logged in (replace with your actual authentication logic)
-    function checkUserLoggedIn() {
-        // Assuming you have a session variable named 'user_id'
-        return (typeof user_id !== 'undefined' && user_id !== null);
-    }
-
-    // Function to calculate the total price of items in the cart
-    function calculateTotalPrice() {
-        var totalPrice = 0;
-
-        cartItems.forEach(function (item) {
-            totalPrice += item.price * item.quantity;
-        });
-
-        return totalPrice;
-    }
-
-    // Function to get the current date in the format YYYY-MM-DD
-    function getCurrentDate() {
-        var currentDate = new Date();
-        var year = currentDate.getFullYear();
-        var month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
-        var day = ('0' + currentDate.getDate()).slice(-2);
-        return year + '-' + month + '-' + day;
-    }
-
-    function addOrderToDatabase(order) {
-      
-        console.log('Order added to the database:', order);
-    }
-}
