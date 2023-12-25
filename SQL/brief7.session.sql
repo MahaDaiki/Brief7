@@ -119,3 +119,11 @@ CREATE TABLE orderproduct(
  );
 
  describe BasketProducts;
+
+ insert into BasketProducts
+ values(1, 5),
+ (2, 7),
+ (3, 7),
+ (4, 8);
+
+ SELECT * FROM BasketProducts;
