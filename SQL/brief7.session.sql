@@ -9,17 +9,17 @@ CREATE TABLE clients (
     adresse VARCHAR(250),
     city VARCHAR(250),
     passw VARCHAR(220) NOT NULL,
-    valide BOOLEAN DEFAULT 0 ,
+    valide BOOLEAN DEFAULT 0,
     PRIMARY KEY (id)
 );
 
 --@block
 CREATE TABLE admins(
-    id INT PRIMARY KEY NOT NULL ,
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     username VARCHAR(100) NOT NULL,
     email VARCHAR(250) NOT NULL,
     passw VARCHAR(250) NOT NULL
-
+    
 );
 --@block
 INSERT INTO admins ( username , email ,passw) VALUES
