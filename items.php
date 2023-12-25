@@ -49,7 +49,8 @@ session_start();
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="checkout()">Checkout</button>
+                <!-- <button type="button" class="btn btn-primary" onclick="checkout()">Checkout</button> -->
+                <a href="" class="btn btn-primary">Checkout</a>
             </div>
         </div>
     </div>
@@ -97,6 +98,7 @@ session_start();
         </div>
     </div>
 </nav>
+
 <div class="container">
     <div class="row">
         <div class="col-md-3">
@@ -108,8 +110,8 @@ session_start();
                         <a class="btn btn-outline-primary" href=add.php>ADD</a>
                         <a class="btn btn-outline-danger mx-3" href=Manage.php>Manage</a>
                         </div>';
-    }
-    ?>
+                }
+                ?>
           
               
                 <div>
@@ -117,8 +119,8 @@ session_start();
                         <input type="checkbox" class="common_selector" id="sort_alphabetically"> Sort Alphabetically
                     </label>
                     <label>
-    <input type="checkbox" class="common_selector" id="stock_filter"> Stock Filter
-</label>
+                    <input type="checkbox" class="common_selector" id="stock_filter"> Stock Filter
+                    </label>
                     <?php
                     $query = "SELECT catname, imgs FROM Categories WHERE bl = 1 ORDER BY catname ASC";
                     $result = mysqli_query($conn, $query);
