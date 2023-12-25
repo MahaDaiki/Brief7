@@ -1,53 +1,40 @@
 <?php
-session_start(); // Start the session
+session_start(); 
 
 require_once("config.php");
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addItem'])) {
-    $items = $_POST['items'];
+if ($_SERVER['REQUEST_METHOD']=='POST') {
+    $loopCount = count($_POST['productname']); 
 
-    foreach ($items as $item) {
-        // Check if the 'imgs' key exists
-        $imgs = isset($item['imgs']) ? $item['imgs'] : null;
+    for ($i = 0; $i < $loopCount; $i++) {
+        $productname = $_POST['productname'][$i];
+        $barcode = $_POST['barcode'][$i];
+        $purchase_price = $_POST['purchase_price'][$i];
+        $final_price = $_POST['final_price'][$i];
+        $price_offer = $_POST['price_offer'][$i];
+        $descrip = $_POST['descrip'][$i];
+        $min_quantity = $_POST['min_quantity'][$i];
+        $stock_quantity = $_POST['stock_quantity'][$i];
+        $category_name = $_POST['category_name'][$i];
 
-        // Initialize $imageFilePath
-        $imageFilePath = "";
-        if ($imgs !== null) {
-            $imagePath = "img/";
-            $imageFileName = $imgs['name'];
-            $imageFilePath = $imagePath . $imageFileName;
+        // Handle image upload
+        $imagePath = "img/";
+        $imageFileName = $_FILES['imgs']['name'][$i];
+    $imageFilePath = $imagePath . $imageFileName;
 
-            move_uploaded_file($imgs['tmp_name'], $imageFilePath);
-        }
+    move_uploaded_file($_FILES['imgs']['tmp_name'][$i], $imageFilePath);
 
-        // Check if 'price_offer' key exists
-        $price_offer = isset($item['price_offer']) ? $item['price_offer'] : null;
-
-        // Continue with other key assignments
-        $productname = $item['productname'];
-        $barcode = $item['barcode'];
-        $purchase_price = $item['purchase_price'];
-        $final_price = $item['final_price'];
-        $descrip = $item['descrip'];
-        $min_quantity = $item['min_quantity'];
-        $stock_quantity = $item['stock_quantity'];
-        $category_name = $item['category_name'];
-
-        // Use $imageFilePath and $price_offer in the SQL query
-        $sql = "INSERT INTO Products (imgs, productname, barcode, purchase_price, final_price, price_offer, descrip, min_quantity, stock_quantity, category_name, bl) 
-                VALUES ('$imageFilePath', '$productname', '$barcode', '$purchase_price', '$final_price', '$price_offer', '$descrip', '$min_quantity', '$stock_quantity', '$category_name', 1)";
+        $query =  "INSERT INTO Products (imgs, productname, barcode, purchase_price, final_price, price_offer, descrip, min_quantity, stock_quantity, category_name, bl) 
+                    VALUES ('$imageFilePath', '$productname', '$barcode', '$purchase_price', '$final_price', '$price_offer', '$descrip', '$min_quantity', '$stock_quantity', '$category_name', 1)";
         
-        try {
-            $conn->query($sql);
-        } catch (mysqli_sql_exception $e) {
-            echo "Error: " . $sql . "<br>" . $e->getMessage();
+        if (mysqli_query($conn, $query)) {
+            echo "Product added successfully!";
+        } else {
+            echo "Error: " . mysqli_error($conn);
         }
     }
-
-    echo "New items added successfully";
+    $conn->close();
 }
-
-$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -114,43 +101,43 @@ $conn->close();
             <div class="item">
                 <div class="form-group">
                     <label for="imgs">Image Upload:</label>
-                    <input type="file" class="form-control-file" name="items[0][imgs]">
+                    <input type="file" class="form-control-file" name="imgs[]">
                 </div>
                 <div class="form-group">
                     <label for="productname">Product Name:</label>
-                    <input type="text" class="form-control" name="items[0][productname]" required>
+                    <input type="text" class="form-control" name="productname[]" required>
                 </div>
                 <div class="form-group">
                     <label for="barcode">Barcode:</label>
-                    <input type="number" class="form-control" name="items[0][barcode]" required>
+                    <input type="number" class="form-control" name="barcode[]" required>
                 </div>
                 <div class="form-group">
                     <label for="purchase_price">Purchase Price:</label>
-                    <input type="number" class="form-control" name="items[0][purchase_price]" required>
+                    <input type="number" class="form-control" name="purchase_price[]" required>
                 </div>
                 <div class="form-group">
                     <label for="final_price">Final Price:</label>
-                    <input type="number" class="form-control" name="items[0][final_price]" required>
+                    <input type="number" class="form-control" name="final_price[]" required>
                 </div>
                 <div class="form-group">
                     <label for="price_offer">Price Offer:</label>
-                    <input type="number" class="form-control" name="items[0][price_offer]">
+                    <input type="number" class="form-control" name="price_offer[]">
                 </div>
                 <div class="form-group">
                     <label for="descrip">Description:</label>
-                    <textarea class="form-control" name="items[0][descrip]" required></textarea>
+                    <textarea class="form-control" name="descrip[]" required></textarea>
                 </div>
                 <div class="form-group">
                     <label for="min_quantity">Min Quantity:</label>
-                    <input type="number" class="form-control" name="items[0][min_quantity]" required>
+                    <input type="number" class="form-control" name="min_quantity[]" required>
                 </div>
                 <div class="form-group">
                     <label for="stock_quantity">Stock Quantity:</label>
-                    <input type="number" class="form-control" name="items[0][stock_quantity]" required>
+                    <input type="number" class="form-control" name="stock_quantity[]" required>
                 </div>
                 <div class="form-group">
                     <label for="category_name">Category Name:</label>
-                    <input type="text" class="form-control" name="items[0][category_name]" required>
+                    <input type="text" class="form-control" name="category_name[]" required>
                 </div>
             </div>
         </div>

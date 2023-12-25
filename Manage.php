@@ -45,12 +45,12 @@ function updateCategory($categoryName, $description, $imagePath) {
 }
 
 // Function to add a new category
-function addCategory($categoryName, $description, $imagePath) {
-    global $conn;
-    $sql = "INSERT INTO Categories (catname, descrip, imgs, bl) VALUES ('$categoryName', '$description', '$imagePath', 1)";
+// function addCategory($categoryName, $description, $imagePath) {
+//     global $conn;
+//     $sql = "INSERT INTO Categories (catname, descrip, imgs, bl) VALUES ('$categoryName', '$description', '$imagePath', 1)";
 
-    return $conn->query($sql);
-}
+//     return $conn->query($sql);
+// }
 
 // Function to delete (hide) a category
 function deleteCategory($categoryName) {
@@ -60,37 +60,34 @@ function deleteCategory($categoryName) {
     return $conn->query($sql);
 }
 
-// Check if the form is submitted for adding a new category
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add'])) {
-    $newCategoryName = $_POST['new_category_name'];
-    $newDescription = $_POST['new_description'];
+if ($_SERVER['REQUEST_METHOD']=='POST') {
+    $loopCount = count($_POST['catname']); 
 
-    // Check if an image file is uploaded
-    if ($_FILES['new_image']['error'] == 0) {
-        $imagePath = "img/"; // Set the target directory
-        $imageFileName = $_FILES['new_image']['name'];
-        $imageFilePath = $imagePath . $imageFileName;
+    for ($i = 0; $i < $loopCount; $i++) {
+        $catname = $_POST['catname'][$i];
+        $descrip = $_POST['descrip'][$i];
+      
+        // Handle image upload
+        $imagePath = "img/";
+        $imageFileName = $_FILES['imgs']['name'][$i];
+    $imageFilePath = $imagePath . $imageFileName;
 
-        // Move the uploaded file to the target directory
-        if (move_uploaded_file($_FILES['new_image']['tmp_name'], $imageFilePath)) {
-           
+    move_uploaded_file($_FILES['imgs']['tmp_name'][$i], $imageFilePath);
+
+    $sql = "INSERT INTO Categories (catname, descrip, imgs, bl) VALUES ('$catname', '$descrip', '$imageFilePath', 1)";
+
+        
+        if (mysqli_query($conn, $sql)) {
+            echo "<script type='text/javascript'>alert('New category added successfully!');</script>";
         } else {
-            echo "Error moving uploaded file.";
+            echo "Error: " . mysqli_error($conn);
         }
-    } else {
-        $imagePath = "";
-        $imageFilePath = "";
-    } 
-    
-
-    // Add the new category to the database
-    if (addCategory($newCategoryName, $newDescription, $imageFilePath)) {
-        echo "<script type='text/javascript'>alert('New category added successfully!');</script>";
-    } else {
-        echo "Error adding new category: " . $conn->error;
     }
-}
+    $categories = fetchCategories();  
 
+$conn->close();
+   
+}
 
 if (isset($_GET['delete_category'])) {
     $categoryName = $_GET['delete_category'];
@@ -207,15 +204,15 @@ $categories = fetchCategories();
             <div class="item">
                 <div class="form-group">
                     <label for="new_category_name">Category Name:</label>
-                    <input type="text" class="form-control" name="new_category_name[0]" required>
+                    <input type="text" class="form-control" name="catname[]" required>
                 </div>
                 <div class="form-group">
                     <label for="new_description">Description:</label>
-                    <textarea class="form-control" name="new_description[0]" required></textarea>
+                    <textarea class="form-control" name="descrip[]" required></textarea>
                 </div>
                 <div class="form-group">
                     <label for="new_image">Image:</label>
-                    <input type="file" class="form-control-file" name="new_image[0]">
+                    <input type="file" class="form-control-file" name="imgs[]">
                 </div>
             </div>
         </div>
