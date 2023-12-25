@@ -138,6 +138,7 @@ $order_result = $conn->query("SELECT orders.id, orders.creation_date, clients.fu
                     <th>ID</th>
                     <th>Username</th>
                     <th>Email</th>
+                    <th>Status</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -148,6 +149,11 @@ $order_result = $conn->query("SELECT orders.id, orders.creation_date, clients.fu
                     echo "<td>{$client_row['id']}</td>";
                     echo "<td>{$client_row['username']}</td>";
                     echo "<td>{$client_row['email']}</td>";
+                    if ($client_row['valide']==0){
+                        echo "<td>unvalide</td>";
+                    }else{
+                        echo "<td>valide</td>";
+                    }
                     echo "<td>";
                     echo "<a href='adminpan.php?delete_user={$client_row['id']}' class='btn btn-danger btn-sm mr-2'>Delete</a>";
                     if (isset($client_row['valide']) && $client_row['valide'] == 0) {
@@ -214,51 +220,6 @@ $order_result = $conn->query("SELECT orders.id, orders.creation_date, clients.fu
         </table>
     </div>
     
-    <!-- <?php
-         // Show order detail
-    // if (isset($_GET["order_detail"])) {
-    //     $ord_id= $_GET["order_detail"];
-    
-        // echo '<div class="container mt-5">';
-        // echo '<h3 class="mt-5 text-center">Orders detail</h3>';
-        // echo '<table class="table">';
-        // echo '<thead>';
-        // echo '<tr>';
-        // echo '<th>order id</th>';
-        // echo '<th>client name</th>';
-        // echo '<th>creation date</th>';
-        // echo '<th>sending date</th>';
-        // echo '<th>delivring date</th>';
-        // echo '</tr>';
-        // echo '</thead>';
-        // $ord = $order_detail-> fetch_assoc();
-        // echo '<tbody>';
-        // echo '<tr>';
-        // echo "<td>{$ord['id']}</td>";
-        // echo "<td>{$ord['fullname']}</td>";
-        // echo "<td>{$ord['creation_date']}</td>";
-        // echo "<td>{$ord['shipping_date']}</td>";
-        // echo "<td>{$ord['delivery_date']}</td>";
-        // echo '</tr>';
-        // echo '</tbody>';
-        // echo '</table>';
-    
-        // echo '<h4>Product</h4>';
-        // echo '<table class="table">';
-        // echo '<thead>';
-        // echo '<tr>';
-        // echo '<th>order id</th>';
-        // echo '<th>order id</th>';
-        // echo '<th>order id</th>';
-        // echo '</tr>';
-        // echo '</thead>';
-        // echo '</table>';
-        // echo "<h5>Total Price:{}</h5>";
-        // echo '</div>';
-    
-    // }
-    ?> -->
-
     <script src="index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
