@@ -57,7 +57,7 @@ INSERT INTO categories ( catname , descrip ,imgs, bl) VALUES
 
 --@block
 CREATE TABLE products (
-    reference INT PRIMARY KEY,
+    reference INT PRIMARY KEY AUTO_INCREMENT,
     imgs VARCHAR(250),
     productname VARCHAR(255) NOT NULL,
     barcode VARCHAR(10) NOT NULL,
