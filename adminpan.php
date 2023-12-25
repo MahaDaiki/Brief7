@@ -55,53 +55,16 @@ if (isset($_GET["unverify_user"])) {
     exit();
 }
 
+
 // Retrieve all for display 
 //$select_users_sql = "SELECT * FROM users";
 $client_result = $conn->query("SELECT * FROM clients");
 //$select_admins_sql = "SELECT * FROM admins";
 $admins_result = $conn->query("SELECT * FROM admins");
-$order_result = $conn->query("SELECT * FROM orders");
-$order_detail = $conn->query("SELECT * FROM orders, clients, orderproduct WHERE orders.client_id = clients.id and orders.id = orderproduct.order_id");
+$order_result = $conn->query("SELECT orders.id, orders.creation_date, clients.fullname 
+                                FROM orders  INNER JOIN clients 
+                                ON orders.client_id=clients.id");
 
-function ShowDetail($ord){
-    global $order_detail;
-    echo '<div class="container mt-5">';
-    echo '<h3 class="mt-5 text-center">Orders detail</h3>';
-    echo '<table class="table">';
-    echo '<thead>';
-    echo '<tr>';
-    echo '<th>order id</th>';
-    echo '<th>client name</th>';
-    echo '<th>creation date</th>';
-    echo '<th>sending date</th>';
-    echo '<th>delivring date</th>';
-    echo '</tr>';
-    echo '</thead>';
-    $ord = $order_detail-> fetch_assoc();
-    echo '<tbody>';
-    echo '<tr>';
-    echo "<td>{$ord['orders.id']}</td>";
-    echo "<td>{$ord['clients.fullname']}</td>";
-    echo "<td>{$ord['orders.creation_date']}</td>";
-    echo "<td>{$ord['orders.shipping_date']}</td>";
-    echo "<td>{$ord['orders.delivery_date']}</td>";
-    echo '</tr>';
-    echo '</tbody>';
-    echo '</table>';
-
-    echo '<h4>Product</h4>';
-    echo '<table class="table">';
-    echo '<thead>';
-    echo '<tr>';
-    echo '<th>order id</th>';
-    echo '<th>order id</th>';
-    echo '<th>order id</th>';
-    echo '</tr>';
-    echo '</thead>';
-    echo '</table>';
-    echo "<h5>Total Price:{}</h5>";
-    echo '</div>';
-}
 ?>
 
 <!DOCTYPE html>
@@ -122,7 +85,7 @@ function ShowDetail($ord){
         <a href="#" class="navbar-brand">NE</a>
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a href="home.php" class="nav-link">Home</a>
+                <a href="index.php" class="nav-link">Home</a>
             </li>
             <li class="nav-item">
                 <a href="category.php" class="nav-link">Categories</a>
@@ -238,11 +201,11 @@ function ShowDetail($ord){
                 <?php
                     while ($order_row = $order_result->fetch_assoc()) {
                         echo "<tr>";
-                        echo "<td>{$order_row['order_id']}</td>";
+                        echo "<td>{$order_row['id']}</td>";
                         echo "<td>{$order_row['creation_date']}</td>";
-                        echo "<td>{$order_row['client_id']}</td>";
+                        echo "<td>{$order_row['fullname']}</td>";
                         echo "<td>";
-                        echo "<button onclick='ShowDetail($order_row)'>detail</button>";
+                        echo "<a href='adminpan.php?order_detail={$order_row['id']}' class='btn btn-info btn-sm mr-2'>Detail</a>";
                         echo "</td>";
                         echo "</tr>";
                     }
@@ -251,6 +214,51 @@ function ShowDetail($ord){
         </table>
     </div>
     
+    <!-- <?php
+         // Show order detail
+    // if (isset($_GET["order_detail"])) {
+    //     $ord_id= $_GET["order_detail"];
+    
+    //     echo '<div class="container mt-5">';
+    //     echo '<h3 class="mt-5 text-center">Orders detail</h3>';
+    //     echo '<table class="table">';
+    //     echo '<thead>';
+    //     echo '<tr>';
+    //     echo '<th>order id</th>';
+    //     echo '<th>client name</th>';
+    //     echo '<th>creation date</th>';
+    //     echo '<th>sending date</th>';
+    //     echo '<th>delivring date</th>';
+    //     echo '</tr>';
+    //     echo '</thead>';
+    //     $ord = $order_detail-> fetch_assoc();
+    //     echo '<tbody>';
+    //     echo '<tr>';
+    //     echo "<td>{$ord['id']}</td>";
+    //     echo "<td>{$ord['fullname']}</td>";
+    //     echo "<td>{$ord['creation_date']}</td>";
+    //     echo "<td>{$ord['shipping_date']}</td>";
+    //     echo "<td>{$ord['delivery_date']}</td>";
+    //     echo '</tr>';
+    //     echo '</tbody>';
+    //     echo '</table>';
+    
+    //     echo '<h4>Product</h4>';
+    //     echo '<table class="table">';
+    //     echo '<thead>';
+    //     echo '<tr>';
+    //     echo '<th>order id</th>';
+    //     echo '<th>order id</th>';
+    //     echo '<th>order id</th>';
+    //     echo '</tr>';
+    //     echo '</thead>';
+    //     echo '</table>';
+    //     echo "<h5>Total Price:{}</h5>";
+    //     echo '</div>';
+    
+    // }
+    ?> -->
+
     <script src="index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 

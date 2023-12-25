@@ -64,7 +64,7 @@ session_start();
               $isAdmin = false;
             } else {
               // Redirect to the login page if neither admin nor user is logged in
-              header("Location: index.php");
+              header("Location: login.php");
               exit();
             }
             ?>
