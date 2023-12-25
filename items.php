@@ -17,8 +17,7 @@ session_start();
 <nav class="navbar navbar-expand-sm navbar-dark ">
     <div class="container">
         <a href="#" class="navbar-brand">NE</a>
-        
-        <!-- Add the burger menu button for smaller screens -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-...." crossorigin="anonymous" />
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -31,7 +30,11 @@ session_start();
                     <a href="items.php" class="nav-link">items</a>
                 </li>
             </ul>
-
+            <span class="navbar-text">
+    <a href="basket.php" class="nav-link">
+        <i class="fas fa-shopping-cart"></i>
+    </a>
+</span>
             <img width="48" src="img/user-286-128.png" alt="profile" class="user-pic">
 
             <div class="menuwrp" id="subMenu">
