@@ -76,7 +76,24 @@
 
   // Function to handle the checkout button click
   function checkout() {
+    alert(JSON.stringify(cartItems));
+
+            // Convert the array to a JSON string
+            var cartItemsJSON = JSON.stringify(cartItems);
+
+            // Make an AJAX request to the PHP script
+            $.ajax({
+            type: "POST",
+            url: "items.php",
+            data: { cartItems: cartItemsJSON },
+            success: function(response) {
+                console.log(response); // Handle the response from the server if needed
+            }
+            });
+
+
        function checkout() {
+
         // Check if the user is logged in (replace with your actual authentication logic)
         var isLoggedIn = checkUserLoggedIn();
 
@@ -136,7 +153,21 @@
     }
 
     function addOrderToDatabase(order) {
-      
-        console.log('Order added to the database:', order);
+
+        // cartItems.forEach((product) => {
+        //     const query = 'INSERT INTO orderproduct (order_id, product_ref, quantity) VALUES (?, ?, ?)';
+        //     const values = [order_id, product.reference, product.quantity];
+          
+        //     connection.query(query, values, (err, results) => {
+        //       if (err) {
+        //         console.error('Error inserting item into MySQL:', err);
+        //       } else {
+        //         console.log('Item inserted into MySQL:', results);
+        //       }
+        //     });
+        //   });
+
+
+        // console.log('Order added to the database:', order);
     }
 }
