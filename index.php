@@ -19,12 +19,12 @@
 </head>
 
     <?php
-session_start();
-        include("config.php");
+    session_start();
+    include("config.php");
 
 
-        $categoriesList = $conn->query("SELECT * FROM Categories;");
-        $productsList = $conn->query("SELECT * FROM Products where stock_quantity > 15;");
+    $categoriesList = $conn->query("SELECT * FROM Categories;");
+    $productsList = $conn->query("SELECT * FROM Products where stock_quantity > 15;");
 
 
 
