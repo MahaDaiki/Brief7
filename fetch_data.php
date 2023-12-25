@@ -4,7 +4,8 @@ include("config.php");
 $isAdmin = isset($_SESSION['is_admin']);
 function generateProductCard($row,$isAdmin) {
    
-    $adminButton = $isAdmin ? '<button class="btn btn-danger btn-sm admin-only-button" data-product-id="' . $row['reference'] . '">Modify</button>' : '';
+    $adminButton = $isAdmin ? '<a href="Modify.php?product_id=' . $row['reference'] . '" class="btn btn-danger btn-sm admin-only-button">Modify</a>' : '';
+
 
     return '
     <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
@@ -23,9 +24,16 @@ function generateProductCard($row,$isAdmin) {
                 </p>
             </div>
             <div class="card-footer bg-white">
-                <a class="btn btn-primary href="items.php?productId=' . $row['reference'] .'" btn-sm add-to-cart" data-product-id="' . $row['reference'] . '">Add to Cart</a>
+               <button class="btn btn-primary btn-sm add-to-cart"
+        data-product-reference="' . $row['reference'] . '"
+        data-product-name="' . $row['productname'] . '"
+        data-product-price="' . $row['final_price'] . '"
+        onclick="addToCart(this)">
+    Add to Cart
+</button>
                 ' . $adminButton . '
             </div>
+            
         </div>
     </div>';
 }
