@@ -49,8 +49,8 @@ session_start();
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <!-- <button type="button" class="btn btn-primary" onclick="checkout()">Checkout</button> -->
-                <a href="" class="btn btn-primary">Checkout</a>
+                <button type="button" class="btn btn-primary" onclick="checkout()">Checkout</button>
+                
             </div>
         </div>
     </div>
@@ -177,38 +177,38 @@ session_start();
 
 
 <?php
-    // Check if the POST data contains the 'cartItems' key
-    if(isset($_POST['cartItems'])) {
-        // Retrieve the JSON string from the POST data
-        $cartItemsJSON = $_POST['cartItems'];
+    // // Check if the POST data contains the 'cartItems' key
+    // if(isset($_POST['cartItems'])) {
+    //     // Retrieve the JSON string from the POST data
+    //     $cartItemsJSON = $_POST['cartItems'];
 
-        // Decode the JSON string to a PHP array
-        $cartItems = json_decode($cartItemsJSON, true);
+    //     // Decode the JSON string to a PHP array
+    //     $cartItems = json_decode($cartItemsJSON, true);
 
-        // Now $cartItems is a PHP array containing the data sent from the client
+    //     // Now $cartItems is a PHP array containing the data sent from the client
 
-        // You can do whatever you need with the $cartItems array here
+    //     // You can do whatever you need with the $cartItems array here
 
-        // For example, you can loop through the items
-        foreach ($cartItems as $item) {
+    //     // For example, you can loop through the items
+    //     foreach ($cartItems as $item) {
 
-            $order_id = $item['reference'];  // Replace 'order_id' with the actual key in your item array
-            $product_ref = $item['reference'];  // Replace 'product_ref' with the actual key in your item array
-            $quantity = $item['quantity'];  // Replace 'quantity' with the actual key in your item array
+    //         $order_id = $item['reference'];  // Replace 'order_id' with the actual key in your item array
+    //         $product_ref = $item['reference'];  // Replace 'product_ref' with the actual key in your item array
+    //         $quantity = $item['quantity'];  // Replace 'quantity' with the actual key in your item array
 
-            $query = "INSERT INTO orderproduct (order_id, product_ref, quantity) VALUES ('$order_id', '$product_ref', '$quantity')";
+    //         $query = "INSERT INTO orderproduct (order_id, product_ref, quantity) VALUES ('$order_id', '$product_ref', '$quantity')";
 
-            if ($conn->query($query) === TRUE) {
-                // Record inserted successfully
-                echo "Item added to orderproduct table successfully";
-            } else {
-                // Handle errors
-                echo "Error adding item to orderproduct table: " . $conn->error;
-            }        }
+    //         if ($conn->query($query) === TRUE) {
+    //             // Record inserted successfully
+    //             echo "Item added to orderproduct table successfully";
+    //         } else {
+    //             // Handle errors
+    //             echo "Error adding item to orderproduct table: " . $conn->error;
+    //         }        }
 
 
-    }
-?>
+    // }
+ ?>
 </body>
 
 </html>

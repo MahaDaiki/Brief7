@@ -2,12 +2,8 @@
 
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
-<<<<<<< HEAD
-define('DB_PASS', '');
-=======
-define('DB_PASS', 'berg@1234');
->>>>>>> eb8a77e81452b7e17f8499e4079484dec8c65a5e
-define('DB_NAME', 'electronacerdb7');
+define('DB_PASS', '1234');
+define('DB_NAME', 'electronacerb7');
 
 try {
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
