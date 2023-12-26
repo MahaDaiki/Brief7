@@ -249,7 +249,7 @@
 
 
 
-
+    <script src="cart.js"></script>
  <script src="index.js"></script>
 <script src="assets/js/home.js"></script>
 

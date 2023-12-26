@@ -46,6 +46,7 @@
           `;
           cartItemsContainer.appendChild(cartItemDiv);
       });
+       localStorage.setItem('cartItems', JSON.stringify(cartItems));
   }
 
   // Function to modify the quantity of an item in the cart
@@ -55,88 +56,53 @@
       if (item) {
           // Increase or decrease the quantity
           item.quantity += amount;
-
-          // If the quantity becomes zero or less, remove the item from the cart
+          // If the quantity becomes zero or less, remove the item from the carrt
           if (item.quantity <= 0) {
               removeItem(reference);
           }
       }
 
-      // Update the cart modal with the current items
       updateCartModal();
   }
 
   // Function to remove an item from the cart
   function removeItem(reference) {
       cartItems = cartItems.filter(item => item.reference !== reference);
-
-      // Update the cart modal with the current items
       updateCartModal();
   }
-
-  // Function to handle the checkout button click
+  document.addEventListener('DOMContentLoaded', function () {
+    var storedCartItems = localStorage.getItem('cartItems');
+    if (storedCartItems) {
+        cartItems = JSON.parse(storedCartItems);
+        updateCartModal();
+    }
+});
   function checkout() {
-       function checkout() {
-        // Check if the user is logged in (replace with your actual authentication logic)
-        var isLoggedIn = checkUserLoggedIn();
-
-        if (isLoggedIn) {
-            // Calculate total price
-            var totalPrice = calculateTotalPrice();
-
-            // Create an order object
-            var order = {
-                creation_date: getCurrentDate(),
-                total_price: totalPrice,
-                bl: 0 // Assuming bl should be set to 0 by default
-                // Add other fields as needed
-            };
-
-            // Add the order to the database (replace with your server-side logic)
-            addOrderToDatabase(order);
-
-            // Clear the cart
-            cartItems = [];
-            updateCartModal();
-
-            // Display a success message or redirect to a confirmation page
-            alert('Order placed successfully!');
-
-        } else {
-            // User is not logged in, display a login prompt or redirect to the login page
-            alert('Please log in before checking out.');
-            // You can redirect to the login page using window.location.href = 'login.php';
+    // Send the cart items to the server using AJAX
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                console.log(xhr.responseText);
+                alert("Checkout successful!");
+                // Clear the cart after checkout
+                cartItems = [];
+                updateCartModal();
+            } else {
+                // If the request failed, handle the error
+                console.error(xhr.statusText);
+                alert("Checkout failed. Please try again.");
+            }
         }
-    }
+    };
 
-    // Function to check if the user is logged in (replace with your actual authentication logic)
-    function checkUserLoggedIn() {
-        // Assuming you have a session variable named 'user_id'
-        return (typeof user_id !== 'undefined' && user_id !== null);
-    }
+    // Prepare the data to send to the server
+    var data = JSON.stringify(cartItems);
 
-    // Function to calculate the total price of items in the cart
-    function calculateTotalPrice() {
-        var totalPrice = 0;
-
-        cartItems.forEach(function (item) {
-            totalPrice += item.price * item.quantity;
-        });
-
-        return totalPrice;
-    }
-
-    // Function to get the current date in the format YYYY-MM-DD
-    function getCurrentDate() {
-        var currentDate = new Date();
-        var year = currentDate.getFullYear();
-        var month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
-        var day = ('0' + currentDate.getDate()).slice(-2);
-        return year + '-' + month + '-' + day;
-    }
-
-    function addOrderToDatabase(order) {
-      
-        console.log('Order added to the database:', order);
-    }
+    xhr.open("POST", "Checkout.php", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    // Send the data
+    xhr.send(data);
 }
+
+
