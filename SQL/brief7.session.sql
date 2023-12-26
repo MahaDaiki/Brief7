@@ -9,27 +9,27 @@ CREATE TABLE clients (
     adresse VARCHAR(250),
     city VARCHAR(250),
     passw VARCHAR(220) NOT NULL,
-    valide BOOLEAN DEFAULT 0 ,
+    valide BOOLEAN DEFAULT 0,
     PRIMARY KEY (id)
 );
 
 --@block
 CREATE TABLE admins(
-    id INT PRIMARY KEY NOT NULL ,
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     username VARCHAR(100) NOT NULL,
     email VARCHAR(250) NOT NULL,
     passw VARCHAR(250) NOT NULL
-
+    
 );
 --@block
 INSERT INTO admins ( username , email ,passw) VALUES
 ('admin1','admin1@email.com','admin1');
 --@block
-CREATE TABLE orders(
+CREATE TABLE orders (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    creation_date DATE,
-    shipping_date DATE,
-    delivery_date DATE,
+    creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    shipping_date DATETIME DEFAULT (CURRENT_TIMESTAMP + INTERVAL 3 DAY),
+    delivery_date DATETIME DEFAULT (CURRENT_TIMESTAMP + INTERVAL 6 DAY),
     total_price DECIMAL(10, 2),
     bl BOOLEAN DEFAULT 0,
     client_id INT,
@@ -57,7 +57,7 @@ INSERT INTO categories ( catname , descrip ,imgs, bl) VALUES
 
 --@block
 CREATE TABLE products (
-    reference INT PRIMARY KEY,
+    reference INT PRIMARY KEY AUTO_INCREMENT,
     imgs VARCHAR(250),
     productname VARCHAR(255) NOT NULL,
     barcode VARCHAR(10) NOT NULL,
@@ -105,25 +105,10 @@ CREATE TABLE orderproduct(
     product_ref INT,
     quantity INT,
     PRIMARY KEY(order_id, product_ref),
-    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
     FOREIGN KEY (product_ref) REFERENCES Products(reference)
 );
  --@block
  UPDATE products SET productname = 'Skytech Desktop gaming' WHERE products . reference = 17;
 
 
- create table BasketProducts(
-    product_id int primary key,
-    foreign key (product_id) references products(reference),
-    quantity int default 1
- );
-
- describe BasketProducts;
-
- insert into BasketProducts
- values(1, 5),
- (2, 7),
- (3, 7),
- (4, 8);
-
- SELECT * FROM BasketProducts;

@@ -1,15 +1,15 @@
 <?php
 session_start();
 
-// Check if the user is logged in and is an admin
-// if (isset($_SESSION["admin_username"])) {
-//     $isAdmin = true;
-// } elseif (isset($_SESSION["username"])) {
-//     $isAdmin = false;
-// } else {
-//     header("Location: index.php");
-//     exit();
-// }
+//Check if the user is logged in and is an admin
+if (isset($_SESSION["admin_username"])) {
+    $isAdmin = true;
+} elseif (isset($_SESSION["username"])) {
+    $isAdmin = false;
+} else {
+    header("Location: index.php");
+    exit();
+}
 
 // Establish a database connection (replace these with your actual database details)
 require_once("config.php");
@@ -55,53 +55,16 @@ if (isset($_GET["unverify_user"])) {
     exit();
 }
 
+
 // Retrieve all for display 
 //$select_users_sql = "SELECT * FROM users";
 $client_result = $conn->query("SELECT * FROM clients");
 //$select_admins_sql = "SELECT * FROM admins";
 $admins_result = $conn->query("SELECT * FROM admins");
-$order_result = $conn->query("SELECT * FROM orders");
-$order_detail = $conn->query("SELECT * FROM orders, clients, orderproduct WHERE orders.client_id = clients.id and orders.id = orderproduct.order_id");
+$order_result = $conn->query("SELECT orders.id, orders.creation_date, clients.fullname 
+                                FROM orders  INNER JOIN clients 
+                                ON orders.client_id=clients.id");
 
-// function ShowDetail($ord){
-//     global $order_detail;
-//     echo '<div class="container mt-5">';
-//     echo '<h3 class="mt-5 text-center">Orders detail</h3>';
-//     echo '<table class="table">';
-//     echo '<thead>';
-//     echo '<tr>';
-//     echo '<th>order id</th>';
-//     echo '<th>client name</th>';
-//     echo '<th>creation date</th>';
-//     echo '<th>sending date</th>';
-//     echo '<th>delivring date</th>';
-//     echo '</tr>';
-//     echo '</thead>';
-//     $ord = $order_detail-> fetch_assoc();
-//     echo '<tbody>';
-//     echo '<tr>';
-//     echo "<td>{$ord['orders.id']}</td>";
-//     echo "<td>{$ord['clients.fullname']}</td>";
-//     echo "<td>{$ord['orders.creation_date']}</td>";
-//     echo "<td>{$ord['orders.shipping_date']}</td>";
-//     echo "<td>{$ord['orders.delivery_date']}</td>";
-//     echo '</tr>';
-//     echo '</tbody>';
-//     echo '</table>';
-
-//     echo '<h4>Product</h4>';
-//     echo '<table class="table">';
-//     echo '<thead>';
-//     echo '<tr>';
-//     echo '<th>order id</th>';
-//     echo '<th>order id</th>';
-//     echo '<th>order id</th>';
-//     echo '</tr>';
-//     echo '</thead>';
-//     echo '</table>';
-//     echo "<h5>Total Price:{}</h5>";
-//     echo '</div>';
-// }
 ?>
 
 <!DOCTYPE html>
@@ -122,10 +85,10 @@ $order_detail = $conn->query("SELECT * FROM orders, clients, orderproduct WHERE 
         <a href="#" class="navbar-brand">NE</a>
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a href="home.php" class="nav-link">Home</a>
+                <a href="index.php" class="nav-link">Home</a>
             </li>
             <li class="nav-item">
-                <a href="category.php" class="nav-link">Categories</a>
+                <a href="items.php" class="nav-link">Items</a>
             </li>
         </ul>
 
@@ -135,16 +98,16 @@ $order_detail = $conn->query("SELECT * FROM orders, clients, orderproduct WHERE 
             <div class="submenu">
                 <div class="userinfo">
                     <?php
-                        // if (isset($_SESSION["admin_username"])) {
-                        //     $displayName = $_SESSION["admin_username"];
-                        //     $isAdmin = true;
-                        // } elseif (isset($_SESSION["username"])) {
-                        //     $displayName = $_SESSION["username"];
-                        //     $isAdmin = false;
-                        // } else {
-                        //     header("Location: index.php");
-                        //     exit();
-                        // }
+                        if (isset($_SESSION["admin_username"])) {
+                            $displayName = $_SESSION["admin_username"];
+                            $isAdmin = true;
+                        } elseif (isset($_SESSION["username"])) {
+                            $displayName = $_SESSION["username"];
+                            $isAdmin = false;
+                        } else {
+                            header("Location: index.php");
+                            exit();
+                        }
                     ?>
                     <div class="userinfo">
                         <img src="img/user-286-128.png" alt="user">
@@ -175,6 +138,7 @@ $order_detail = $conn->query("SELECT * FROM orders, clients, orderproduct WHERE 
                     <th>ID</th>
                     <th>Username</th>
                     <th>Email</th>
+                    <th>Status</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -185,6 +149,11 @@ $order_detail = $conn->query("SELECT * FROM orders, clients, orderproduct WHERE 
                     echo "<td>{$client_row['id']}</td>";
                     echo "<td>{$client_row['username']}</td>";
                     echo "<td>{$client_row['email']}</td>";
+                    if ($client_row['valide']==0){
+                        echo "<td>unvalide</td>";
+                    }else{
+                        echo "<td>valide</td>";
+                    }
                     echo "<td>";
                     echo "<a href='adminpan.php?delete_user={$client_row['id']}' class='btn btn-danger btn-sm mr-2'>Delete</a>";
                     if (isset($client_row['valide']) && $client_row['valide'] == 0) {
@@ -238,11 +207,11 @@ $order_detail = $conn->query("SELECT * FROM orders, clients, orderproduct WHERE 
                 <?php
                     while ($order_row = $order_result->fetch_assoc()) {
                         echo "<tr>";
-                        echo "<td>{$order_row['order_id']}</td>";
+                        echo "<td>{$order_row['id']}</td>";
                         echo "<td>{$order_row['creation_date']}</td>";
-                        echo "<td>{$order_row['client_id']}</td>";
+                        echo "<td>{$order_row['fullname']}</td>";
                         echo "<td>";
-                        echo "<button onclick='ShowDetail($order_row)'>detail</button>";
+                        echo "<a href='order_detail.php?reference={$order_row['id']}' class='btn btn-info btn-sm mr-2'>Detail</a>";
                         echo "</td>";
                         echo "</tr>";
                     }
