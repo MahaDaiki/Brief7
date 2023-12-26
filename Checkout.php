@@ -1,7 +1,18 @@
 <?php
 require_once("config.php");
 
-// Assuming $clientId is obtained from your application
+// Start or resume the session
+session_start();
+
+// Check if the user is logged in and has a valid session
+if (!isset($_SESSION['client_id'])) {
+    echo json_encode(['success' => false, 'error' => 'User not logged in']);
+    exit();
+}
+
+// Retrieve client_id from the session
+$clientId = $_SESSION['client_id'];
+
 $data = json_decode(file_get_contents("php://input"), true);
 
 if (!$data) {
@@ -17,34 +28,25 @@ try {
         $quantity = $item['quantity'];
         $productRef = $item['reference'];
 
-        // Fetch the product price from the database based on $productRef
-        $productPriceQuery = "SELECT final_price FROM products WHERE reference = ?";
-        $productPriceStmt = $pdo->prepare($productPriceQuery);
+        $productPriceQuery = "SELECT final_price FROM products WHERE reference = '$productRef'";
+        $productPriceResult = mysqli_query($conn, $productPriceQuery);
 
-        if ($productPriceStmt->execute([$productRef])) {
-            $productPrice = $productPriceStmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($productPrice) {
-                $totalPrice += $productPrice['final_price'] * $quantity;
-            } else {
-                // Handle error: Unable to fetch product price
-                echo json_encode(['success' => false, 'error' => 'Invalid product reference']);
-                exit();
-            }
+        if ($productPriceResult) {
+            $productPrice = mysqli_fetch_assoc($productPriceResult);
+            $totalPrice += $productPrice['final_price'] * $quantity;
         } else {
-            // Handle error: Unable to execute query
             echo json_encode(['success' => false, 'error' => 'Unable to fetch product price']);
             exit();
         }
     }
 
     // Insert into the orders table
-    $orderInsertQuery = "INSERT INTO orders (creation_date, total_price, client_id) VALUES (NOW(), ?, ?)";
-    $orderInsertStmt = $pdo->prepare($orderInsertQuery);
+    $orderInsertQuery = "INSERT INTO orders (creation_date, total_price, client_id) VALUES (NOW(), $totalPrice, $clientId)";
+    $orderInsertResult = mysqli_query($conn, $orderInsertQuery);
 
-    if ($orderInsertStmt->execute([$totalPrice, $clientId])) {
+    if ($orderInsertResult) {
         // Get the last inserted order_id
-        $orderId = $pdo->lastInsertId();
+        $orderId = mysqli_insert_id($conn);
 
         // Process the data and insert it into the orderproduct table
         foreach ($data as $item) {
@@ -52,10 +54,10 @@ try {
             $quantity = $item['quantity'];
 
             // Insert into the orderproduct table
-            $orderProductInsertQuery = "INSERT INTO orderproduct (order_id, product_ref, quantity) VALUES (?, ?, ?)";
-            $orderProductInsertStmt = $pdo->prepare($orderProductInsertQuery);
+            $orderProductInsertQuery = "INSERT INTO orderproduct (order_id, product_ref, quantity) VALUES ($orderId, '$productRef', $quantity)";
+            $orderProductInsertResult = mysqli_query($conn, $orderProductInsertQuery);
 
-            if (!$orderProductInsertStmt->execute([$orderId, $productRef, $quantity])) {
+            if (!$orderProductInsertResult) {
                 // Handle error: Unable to insert into orderproduct table
                 echo json_encode(['success' => false, 'error' => 'Unable to insert into orderproduct table']);
                 exit();
