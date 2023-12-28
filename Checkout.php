@@ -1,23 +1,20 @@
 <?php
 require_once("config.php");
 
-// Start or resume the session
 session_start();
 
-// Check if the user is logged in and has a valid session
-if (!isset($_SESSION['client_id'])) {
+if (!isset($_SESSION['ID_client'])) {
     echo json_encode(['success' => false, 'error' => 'User not logged in']);
-    exit();
+    // exit();
 }
 
-// Retrieve client_id from the session
-$clientId = $_SESSION['client_id'];
+$clientId = $_SESSION['ID_client'];
 
 $data = json_decode(file_get_contents("php://input"), true);
 
 if (!$data) {
     echo json_encode(['success' => false, 'error' => 'Invalid JSON data']);
-    exit();
+    // exit();
 }
 
 try {
@@ -36,7 +33,7 @@ try {
             $totalPrice += $productPrice['final_price'] * $quantity;
         } else {
             echo json_encode(['success' => false, 'error' => 'Unable to fetch product price']);
-            exit();
+            // exit();
         }
     }
 
@@ -47,18 +44,14 @@ try {
     if ($orderInsertResult) {
         // Get the last inserted order_id
         $orderId = mysqli_insert_id($conn);
-
-        // Process the data and insert it into the orderproduct table
         foreach ($data as $item) {
             $productRef = $item['reference'];
             $quantity = $item['quantity'];
 
-            // Insert into the orderproduct table
             $orderProductInsertQuery = "INSERT INTO orderproduct (order_id, product_ref, quantity) VALUES ($orderId, '$productRef', $quantity)";
             $orderProductInsertResult = mysqli_query($conn, $orderProductInsertQuery);
 
             if (!$orderProductInsertResult) {
-                // Handle error: Unable to insert into orderproduct table
                 echo json_encode(['success' => false, 'error' => 'Unable to insert into orderproduct table']);
                 exit();
             }

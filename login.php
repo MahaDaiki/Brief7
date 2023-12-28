@@ -6,6 +6,7 @@ require_once("config.php");
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST["username"];
     $password = $_POST["password"];
+   
 
     $username = mysqli_real_escape_string($conn, $username);
 
@@ -35,6 +36,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $hashedPassword = $userRow["passw"];
             if (password_verify($password, $hashedPassword)) {
                 $_SESSION["username"] = $username;
+                // $_SESSION["is_client"]= true ;
+                $_SESSION["ID_client"]= $userRow["id"];
                 header("Location: index.php");
                 exit();
             } else {

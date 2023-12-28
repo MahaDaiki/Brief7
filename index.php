@@ -158,7 +158,6 @@
     <!-- POPULAR PRODUCTS  -->
 
 
-
     <!-- CATEGORIES  -->
     <h3 style="color: rgb(0, 137, 236); margin: 50px;">
         CATEGORIES

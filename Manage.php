@@ -44,15 +44,7 @@ function updateCategory($categoryName, $description, $imagePath) {
     return $conn->query($sql);
 }
 
-// Function to add a new category
-// function addCategory($categoryName, $description, $imagePath) {
-//     global $conn;
-//     $sql = "INSERT INTO Categories (catname, descrip, imgs, bl) VALUES ('$categoryName', '$description', '$imagePath', 1)";
 
-//     return $conn->query($sql);
-// }
-
-// Function to delete (hide) a category
 function deleteCategory($categoryName) {
     global $conn;
     $sql = "UPDATE Categories SET bl=false WHERE catname='$categoryName'";
